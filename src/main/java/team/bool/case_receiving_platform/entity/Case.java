@@ -11,7 +11,6 @@ import javax.persistence.Table;
 @Table(name = "case")
 public class Case {
 	
-
 	// 案子ID(自動產生)(PK)(AI)
 	@Id
 	@Column(name = "id")
