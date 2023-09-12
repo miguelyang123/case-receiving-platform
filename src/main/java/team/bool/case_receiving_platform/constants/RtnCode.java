@@ -2,7 +2,8 @@ package team.bool.case_receiving_platform.constants;
 
 public enum RtnCode {
 
-	SUCCESSFUL("200", "successful!"), ERROR("400", "error!");
+	SUCCESSFUL("200", "successful!"),
+	ERROR("400", "error!");
 	
 	private String code;
 
