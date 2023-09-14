@@ -7,5 +7,6 @@ import team.bool.case_receiving_platform.entity.User;
 
 @Repository
 public interface UserDao extends JpaRepository<User, String>{
-
+	
+	public User findByEmail(String email);
 }
