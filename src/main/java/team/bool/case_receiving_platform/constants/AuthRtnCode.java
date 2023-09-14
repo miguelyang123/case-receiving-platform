@@ -8,10 +8,8 @@ public enum AuthRtnCode {
 	DATA_ERROR("400","資料錯誤"),
 	ACCOUNT_EXISTED("400", "帳戶已存在!"),
 	ACCOUNT_NOT_FOUND("404","找不到帳戶"),
-	EMAIL_IS_NULL("400","信箱是空值"),
-	PASSWORD_IS_NULL("400","密碼是空值"),
-	WORONG_PASSWORD("400","密碼錯誤"),
-	ACCOUNT_FORMAT_ERROR("400","信箱格式錯誤"),
+	WORONG_PASSWORD("400","輸入密碼錯誤"),
+	EMAIL_FORMAT_ERROR("400","信箱格式錯誤"),
 	PASSWORD_FORMAT_ERROR("400","密碼格式錯誤"),
 	PLEASE_LOGIN_FIRST("400","請先登入帳戶");
 	
