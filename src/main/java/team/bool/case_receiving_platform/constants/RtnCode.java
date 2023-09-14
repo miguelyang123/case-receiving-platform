@@ -7,7 +7,7 @@ public enum RtnCode {
 	INSUFFICIENT_BALANCE("400", "insufficient balance!"),
 	ACCOUNT_EXISTED("400", "account existed!"),
 	ACCOUNT_NOT_FOUND("404","account not found!"),
-	ACCOUNT_IS_NULL("400","account is null!"),
+	EMAIL_IS_NULL("400","email is null!"),
 	PASSWORD_IS_NULL("400","password is null!"),
 	WORONG_PASSWORD("400","wrong password!"),
 	ACCOUNT_FORMAT_ERROR("400","account format error!"),
