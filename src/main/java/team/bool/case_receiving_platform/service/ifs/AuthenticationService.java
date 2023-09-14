@@ -4,6 +4,8 @@ import team.bool.case_receiving_platform.vo.AuthenticationRes;
 
 public interface AuthenticationService {
 	
-	public AuthenticationRes login(String email, String password);
+	public AuthenticationRes login(String email, String pwd);
+	
+	public AuthenticationRes getBalance(String email, String pwd);
 	
 }
