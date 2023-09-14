@@ -16,13 +16,13 @@ import team.bool.case_receiving_platform.vo.AuthenticationRes;
 import team.bool.case_receiving_platform.vo.LoginReq;
 
 @RestController
-@RequestMapping("/api")
-public class CaseReceivingPlatformController {
+@RequestMapping("api")
+public class AuthenticationController {
 
 	@Autowired
 	private AuthenticationService aService;
 
-	@PostMapping("/login")
+	@PostMapping("login")
 	public AuthenticationRes login(@RequestBody LoginReq req, HttpSession http) {
 		
 		// get DB User Info
@@ -34,8 +34,7 @@ public class CaseReceivingPlatformController {
 			return aService.login(req.getEmail(), req.getPwd());
 		}
 
-
-		
+		// account error
 		if(!res.getCode().equals(AuthRtnCode.SUCCESSFUL.getCode())) {
 			return res;
 		}
@@ -52,7 +51,7 @@ public class CaseReceivingPlatformController {
 	}
 
 	// for check is login
-	@GetMapping("/get_balance")
+	@GetMapping("get_balance")
 	public AuthenticationRes getBalance(HttpSession http) {
 		//get HttpSession user data
 		String email = (String) http.getAttribute("email");
@@ -63,6 +62,14 @@ public class CaseReceivingPlatformController {
 		}
 
 		return aService.getBalance(email, pwd);
+	}
+	
+	@PostMapping(value = "logout")
+	public AuthenticationRes logout(HttpSession httpSession) {
+		// Invalid Session
+		httpSession.invalidate();
+		return new AuthenticationRes(AuthRtnCode.SUCCESSFUL_LOGOUT.getCode(),
+				AuthRtnCode.SUCCESSFUL_LOGOUT.getMessage());
 	}
 
 }
