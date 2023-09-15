@@ -1,8 +1,6 @@
 package team.bool.case_receiving_platform.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,5 +15,14 @@ public class CaseReceivingPlatformController {
 //		return Service.add(req);
 //
 //	}
+	
+    @PostMapping(value = "/user_page_upload")
+    public void addStore() {
+        
+        System.out.println("user_page_upload!");
+        
+        return;
+
+    }
 
 }
