@@ -2,74 +2,49 @@ package team.bool.case_receiving_platform.entity;
 
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Type;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-// Json映照到UserInfo 忽略的欄位
-
-@Entity
-@Table(name = "user")
-public class User {
+// User with out pwd
+@JsonIgnoreProperties(value={"password"})
+public class UserInfo {
 
 	// UUID
-	@Id
-	@Type(type = "uuid-char")
-	@Column(name = "uuid")
 	private UUID uuid;
 
 	// E-Mail
-	@Column(name = "email")
 	private String email;
 
 	// 姓名
 	@JsonProperty("user_name")
-	@Column(name = "user_name")
 	private String userName;
 
-	// 密碼 (加密)
-	@JsonProperty("password")
-	@Column(name = "pwd")
-	private String pwd;
-
 	// 手機
-	@Column(name = "phone")
 	private String phone;
 
 	// 評價
-	@Column(name = "rating")
 	private int rating;
 
 	// 履歷 (檔案位置名稱)
-	@Column(name = "resume_pdf_path")
 	private String resumePdfPath;
 
 	// 身份權限(是否是管理者)
-	@Column(name = "is_administrator")
 	private boolean isAdministrator;
 
 	// 鎖定狀態
-	@Column(name = "locked_status")
 	private boolean lockedStatus;
 
-	
 	// 建構方法
-	public User() {
+	public UserInfo() {
 		super();
 	}
 
-	public User(UUID uuid, String email, String pwd, String phone, int rating, String resumePdfPath,
+	public UserInfo(UUID uuid, String email, String userName, String phone, int rating, String resumePdfPath,
 			boolean isAdministrator, boolean lockedStatus) {
 		super();
 		this.uuid = uuid;
 		this.email = email;
-		this.pwd = pwd;
+		this.userName = userName;
 		this.phone = phone;
 		this.rating = rating;
 		this.resumePdfPath = resumePdfPath;
@@ -77,7 +52,6 @@ public class User {
 		this.lockedStatus = lockedStatus;
 	}
 
-	
 	// Getters and setters
 	public UUID getUuid() {
 		return uuid;
@@ -101,14 +75,6 @@ public class User {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	public String getPwd() {
-		return pwd;
-	}
-
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
 	}
 
 	public String getPhone() {
