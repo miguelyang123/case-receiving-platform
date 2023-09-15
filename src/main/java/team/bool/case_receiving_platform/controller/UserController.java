@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import team.bool.case_receiving_platform.constants.AuthRtnCode;
+import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.AuthRes;
 import team.bool.case_receiving_platform.vo.LoginReq;
@@ -64,12 +65,17 @@ public class UserController {
 		return userService.getBalance(email, pwd);
 	}
 	
-	@PostMapping(value = "logout")
+	@PostMapping("logout")
 	public AuthRes logout(HttpSession httpSession) {
 		// Invalid Session
 		httpSession.invalidate();
 		return new AuthRes(AuthRtnCode.SUCCESSFUL_LOGOUT.getCode(),
 				AuthRtnCode.SUCCESSFUL_LOGOUT.getMessage());
+	}
+	
+	@PostMapping("signup")
+	public AuthRes signup(User user,HttpSession httpSession) {
+		return userService.addNewUser(user);
 	}
 
 }

@@ -12,4 +12,6 @@ import team.bool.case_receiving_platform.entity.User;
 public interface UserDao extends JpaRepository<User, UUID>{
 	
 	public Optional<User> findByEmail(String email);
+	
+	public boolean existsByEmail(String email);
 }
