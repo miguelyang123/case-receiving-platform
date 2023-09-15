@@ -1,13 +1,13 @@
 package team.bool.case_receiving_platform.entity;
 
-import java.util.UUID;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Type;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -150,5 +150,11 @@ public class User {
 	public void setLockedStatus(boolean lockedStatus) {
 		this.lockedStatus = lockedStatus;
 	}
+
+    @Override
+    public String toString() {
+        return "User [uuid=" + uuid + ", email=" + email + ", userName=" + userName + ", pwd=" + pwd + ", phone=" + phone + ", rating=" + rating + ", resumePdfPath="
+               + resumePdfPath + ", isAdministrator=" + isAdministrator + ", lockedStatus=" + lockedStatus + "]";
+    }
 
 }
