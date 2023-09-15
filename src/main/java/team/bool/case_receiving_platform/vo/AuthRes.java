@@ -2,7 +2,7 @@ package team.bool.case_receiving_platform.vo;
 
 import team.bool.case_receiving_platform.entity.UserInfo;
 
-public class AuthenticationRes {
+public class AuthRes {
 
 	private String code;
 
@@ -10,17 +10,17 @@ public class AuthenticationRes {
 
 	private UserInfo userInfo;
 
-	public AuthenticationRes() {
+	public AuthRes() {
 		super();
 	}
 
-	public AuthenticationRes(String code, String message) {
+	public AuthRes(String code, String message) {
 		super();
 		this.code = code;
 		this.message = message;
 	}
 
-	public AuthenticationRes(String code, String message, UserInfo userInfo) {
+	public AuthRes(String code, String message, UserInfo userInfo) {
 		super();
 		this.code = code;
 		this.message = message;

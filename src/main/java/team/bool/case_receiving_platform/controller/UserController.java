@@ -11,27 +11,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import team.bool.case_receiving_platform.constants.AuthRtnCode;
-import team.bool.case_receiving_platform.service.ifs.AuthenticationService;
-import team.bool.case_receiving_platform.vo.AuthenticationRes;
+import team.bool.case_receiving_platform.service.ifs.UserService;
+import team.bool.case_receiving_platform.vo.AuthRes;
 import team.bool.case_receiving_platform.vo.LoginReq;
 
 @RestController
 @RequestMapping("api")
-public class AuthenticationController {
+public class UserController {
 
 	@Autowired
-	private AuthenticationService aService;
+	private UserService userService;
 
 	@PostMapping("login")
-	public AuthenticationRes login(@RequestBody LoginReq req, HttpSession http) {
+	public AuthRes login(@RequestBody LoginReq req, HttpSession http) {
 		
 		// get DB User Info
-		AuthenticationRes res = aService.login(req.getEmail(), req.getPwd());
+		AuthRes res = userService.login(req.getEmail(), req.getPwd());
 		
 		// Is already login return SUCCESSFUL
 		String email = (String) http.getAttribute("email");
 		if (StringUtils.hasText(email)) {
-			return aService.login(req.getEmail(), req.getPwd());
+			return userService.login(req.getEmail(), req.getPwd());
 		}
 
 		// account error
@@ -52,23 +52,23 @@ public class AuthenticationController {
 
 	// for check is login
 	@GetMapping("get_balance")
-	public AuthenticationRes getBalance(HttpSession http) {
+	public AuthRes getBalance(HttpSession http) {
 		//get HttpSession user data
 		String email = (String) http.getAttribute("email");
 		String pwd = (String) http.getAttribute("password");
 		// not find Session id
 		if (!StringUtils.hasText(email)) {
-			return new AuthenticationRes(AuthRtnCode.PLEASE_LOGIN_FIRST.getCode(), AuthRtnCode.PLEASE_LOGIN_FIRST.getMessage());
+			return new AuthRes(AuthRtnCode.PLEASE_LOGIN_FIRST.getCode(), AuthRtnCode.PLEASE_LOGIN_FIRST.getMessage());
 		}
 
-		return aService.getBalance(email, pwd);
+		return userService.getBalance(email, pwd);
 	}
 	
 	@PostMapping(value = "logout")
-	public AuthenticationRes logout(HttpSession httpSession) {
+	public AuthRes logout(HttpSession httpSession) {
 		// Invalid Session
 		httpSession.invalidate();
-		return new AuthenticationRes(AuthRtnCode.SUCCESSFUL_LOGOUT.getCode(),
+		return new AuthRes(AuthRtnCode.SUCCESSFUL_LOGOUT.getCode(),
 				AuthRtnCode.SUCCESSFUL_LOGOUT.getMessage());
 	}
 
