@@ -38,7 +38,7 @@ public class UserServiceTests {
 		System.out.println(bool);
 	}
 	
-	@Transactional
+//	@Transactional
 	@Test
 	public void addNewUserTest() {
 		User user = new User();

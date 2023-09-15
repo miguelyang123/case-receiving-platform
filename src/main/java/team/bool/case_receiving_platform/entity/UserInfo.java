@@ -2,7 +2,11 @@ package team.bool.case_receiving_platform.entity;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 // User with out pwd
+@JsonIgnoreProperties(value={"password"})
 public class UserInfo {
 
 	// UUID
@@ -12,6 +16,7 @@ public class UserInfo {
 	private String email;
 
 	// 姓名
+	@JsonProperty("user_name")
 	private String userName;
 
 	// 手機

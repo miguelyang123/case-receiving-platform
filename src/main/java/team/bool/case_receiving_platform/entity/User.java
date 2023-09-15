@@ -10,9 +10,10 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 // Json映照到UserInfo 忽略的欄位
-@JsonIgnoreProperties(value={"pwd"})
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -28,10 +29,12 @@ public class User {
 	private String email;
 
 	// 姓名
+	@JsonProperty("user_name")
 	@Column(name = "user_name")
 	private String userName;
 
 	// 密碼 (加密)
+	@JsonProperty("password")
 	@Column(name = "pwd")
 	private String pwd;
 

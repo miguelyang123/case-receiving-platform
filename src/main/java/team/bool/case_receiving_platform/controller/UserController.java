@@ -1,6 +1,7 @@
 package team.bool.case_receiving_platform.controller;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -73,8 +74,10 @@ public class UserController {
 				AuthRtnCode.SUCCESSFUL_LOGOUT.getMessage());
 	}
 	
+//	@Transactional
 	@PostMapping("signup")
-	public AuthRes signup(User user,HttpSession httpSession) {
+	public AuthRes signup(@RequestBody User user,HttpSession httpSession) {
+		System.out.println(user.getEmail());
 		return userService.addNewUser(user);
 	}
 

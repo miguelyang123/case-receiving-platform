@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 			return new AuthRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
 		}
 		// check pwd
-		if (!op.get().getPwd().equals(pwd)) {
+		if (!matchesPwdAndHashPass(pwd,op.get().getPwd())) {
 			return new AuthRes(AuthRtnCode.WORONG_PASSWORD.getCode(), AuthRtnCode.WORONG_PASSWORD.getMessage());
 		}
 
@@ -77,8 +77,8 @@ public class UserServiceImpl implements UserService {
 		return new AuthRes(AuthRtnCode.SUCCESSFUL.getCode(), AuthRtnCode.SUCCESSFUL.getMessage(), null);
 	}
 
-	// check userName & phone
-	private AuthRes checkUserNameAndPhone(User user) {
+	// check email & pwd & userName & phone
+	private AuthRes checkUserInput(User user) {
 
 		// check email & pwd
 		AuthRes checkRes = checkEmailAndPwd(user.getEmail(), user.getPwd());
@@ -115,8 +115,13 @@ public class UserServiceImpl implements UserService {
 
 	// encoder pwd
 	private String encoderPwd(String pwd) {
-		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-		return pwd;
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder.encode(pwd);
+	}
+	
+	private boolean matchesPwdAndHashPass(String pwd,String hashPass) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		 return encoder.matches(pwd, hashPass);
 	}
 	
 	@Override
@@ -135,13 +140,16 @@ public class UserServiceImpl implements UserService {
 	public AuthRes addNewUser(User user) {
 
 		// check email & pwd
-		AuthRes checkRes = checkUserNameAndPhone(user);
+		AuthRes checkRes = checkUserInput(user);
 		if (!checkRes.getCode().equals(AuthRtnCode.SUCCESSFUL.getCode())) {
 			return checkRes;
 		}
 
 		// set UUID
 		user.setUuid(UUID.randomUUID());
+		
+		// encoder pwd
+		user.setPwd(encoderPwd(user.getPwd()));
 
 		// saver to DB
 		userDao.save(user);
