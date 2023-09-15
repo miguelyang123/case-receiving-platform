@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -112,6 +113,12 @@ public class UserServiceImpl implements UserService {
 		return objectMapper.readValue(json, UserInfo.class);
 	}
 
+	// encoder pwd
+	private String encoderPwd(String pwd) {
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		return pwd;
+	}
+	
 	@Override
 	public AuthRes login(String email, String pwd) {
 
