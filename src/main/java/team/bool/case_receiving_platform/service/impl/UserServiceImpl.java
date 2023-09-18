@@ -100,11 +100,6 @@ public class UserServiceImpl implements UserService {
 			return new AuthRes(AuthRtnCode.NAME_FORMAT_ERROR.getCode(), AuthRtnCode.NAME_FORMAT_ERROR.getMessage());
 		}
 
-		// has same email
-		if (userDao.existsByEmail(user.getEmail())) {
-			return new AuthRes(AuthRtnCode.EMAIL_EXISTED.getCode(), AuthRtnCode.EMAIL_EXISTED.getMessage());
-		}
-
 		return new AuthRes(AuthRtnCode.SUCCESSFUL.getCode(), AuthRtnCode.SUCCESSFUL.getMessage(), null);
 	}
 
@@ -148,6 +143,10 @@ public class UserServiceImpl implements UserService {
 		if (!checkRes.getCode().equals(AuthRtnCode.SUCCESSFUL.getCode())) {
 			return checkRes;
 		}
+		// has same email
+		if (userDao.existsByEmail(user.getEmail())) {
+			return new AuthRes(AuthRtnCode.EMAIL_EXISTED.getCode(), AuthRtnCode.EMAIL_EXISTED.getMessage());
+		}
 
 		// set UUID
 		user.setUuid(UUID.randomUUID());
@@ -155,7 +154,7 @@ public class UserServiceImpl implements UserService {
 		// encoder pwd
 		user.setPwd(encoderPwd(user.getPwd()));
 
-		// saver to DB
+		// save to DB
 		userDao.save(user);
 
 		// change User to UserInfo and return
@@ -223,8 +222,7 @@ public class UserServiceImpl implements UserService {
 
 		}
 
-		return new AllUserRes(RtnCode.SUCCESSFUL.getCode(), RtnCode.SUCCESSFUL.getMessage(),
-				userInfoList);
+		return new AllUserRes(RtnCode.SUCCESSFUL.getCode(), RtnCode.SUCCESSFUL.getMessage(), userInfoList);
 	}
 
 	@Override
@@ -235,20 +233,25 @@ public class UserServiceImpl implements UserService {
 		if (!checkRes.getCode().equals(AuthRtnCode.SUCCESSFUL.getCode())) {
 			return checkRes;
 		}
-		
+
+		Optional<User> op = userDao.findById(user.getUuid());
+
 		// account not found
-		if(userDao.existsById(user.getUuid())) {
-			return new AuthRes(RtnCode.ACCOUNT_NOT_FOUND.getCode(), RtnCode.ACCOUNT_NOT_FOUND.getMessage());
+		if (op.isEmpty()) {
+			return new AuthRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
 		}
 
-		// saver to DB
+		// get DB Pwd with encoder
+		user.setPwd(op.get().getPwd());
+
+		// save to DB
 		userDao.save(user);
 
 		// change User to UserInfo and return
 		try {
 			// Successful get UserInfo
 			UserInfo userInfo = userToUserInfo(user);
-			return new AuthRes(AuthRtnCode.SUCCESSFUL_ADD_USER.getCode(), AuthRtnCode.SUCCESSFUL_ADD_USER.getMessage(),
+			return new AuthRes(AuthRtnCode.SUCCESSFUL_CHANGE.getCode(), AuthRtnCode.SUCCESSFUL_CHANGE.getMessage(),
 					userInfo);
 
 		} catch (Exception e) {
@@ -258,5 +261,42 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public AuthRes changePwd(String email, String oldPwd, String newPwd) {
+
+		Optional<User> op = userDao.findByEmail(email);
+		// Account not found
+		if (op.isEmpty()) {
+			return new AuthRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
+		}
+		User user = op.get();
+		// check oldPwd
+		if (!matchesPwdAndHashPass(oldPwd, user.getPwd())) {
+			return new AuthRes(AuthRtnCode.WORONG_PASSWORD.getCode(), AuthRtnCode.WORONG_PASSWORD.getMessage());
+		}
+		// check oldPwd format
+		if (!StringUtils.hasText(newPwd) || !newPwd.matches(pwdPattern)) {
+			return new AuthRes(AuthRtnCode.PASSWORD_FORMAT_ERROR.getCode(),
+					AuthRtnCode.PASSWORD_FORMAT_ERROR.getMessage());
+		}
+
+		// encoder pwd
+		user.setPwd(encoderPwd(newPwd));
+
+		userDao.save(user);
+
+		// change User to UserInfo and return
+		try {
+			// Successful get UserInfo
+			UserInfo userInfo = userToUserInfo(user);
+			return new AuthRes(AuthRtnCode.SUCCESSFUL_CHANGE.getCode(), AuthRtnCode.SUCCESSFUL_CHANGE.getMessage(),
+					userInfo);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new AuthRes(AuthRtnCode.DATA_ERROR.getCode(), e.getMessage());
+
+		}
+	}
 
 }

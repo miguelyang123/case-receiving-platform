@@ -6,6 +6,7 @@ public enum AuthRtnCode {
 	ALREADY_LOGIN("200", "已登入狀態"),
 	SUCCESSFUL_LOGOUT("200", "成功登出"),
 	SUCCESSFUL_ADD_USER("200", "成功新增帳戶"),
+	SUCCESSFUL_CHANGE("200", "成功更改"),
 	DATA_ERROR("400","資料錯誤"),
 	ACCOUNT_EXISTED("400", "帳戶已存在!"),
 	EMAIL_EXISTED("400", "信箱已存在!"),

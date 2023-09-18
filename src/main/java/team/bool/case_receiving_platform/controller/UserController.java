@@ -16,6 +16,7 @@ import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.AllUserRes;
 import team.bool.case_receiving_platform.vo.AuthRes;
+import team.bool.case_receiving_platform.vo.ChangePwdReq;
 import team.bool.case_receiving_platform.vo.LoginReq;
 
 @RestController
@@ -59,7 +60,7 @@ public class UserController {
 		//get HttpSession user data
 		String email = (String) http.getAttribute("email");
 		String pwd = (String) http.getAttribute("password");
-		// not find Session id
+		// not find Session email
 		if (!StringUtils.hasText(email)) {
 			return new AuthRes(AuthRtnCode.PLEASE_LOGIN_FIRST.getCode(), AuthRtnCode.PLEASE_LOGIN_FIRST.getMessage());
 		}
@@ -77,7 +78,7 @@ public class UserController {
 	
 //	@Transactional
 	@PostMapping("signup")
-	public AuthRes signup(@RequestBody User user,HttpSession httpSession) {
+	public AuthRes signup(@RequestBody User user) {
 		return userService.addNewUser(user);
 	}
 	
@@ -87,8 +88,37 @@ public class UserController {
 	}
 	
 	@PostMapping("edit_user")
-	public AuthRes editUser(@RequestBody User user) {
+	public AuthRes editUser(@RequestBody User user, HttpSession http) {
+		//get HttpSession user data
+		String email = (String) http.getAttribute("email");
+		String pwd = (String) http.getAttribute("password");
+		// not login
+		if (!StringUtils.hasText(email)) {
+			return new AuthRes(AuthRtnCode.PLEASE_LOGIN_FIRST.getCode(), AuthRtnCode.PLEASE_LOGIN_FIRST.getMessage());
+		}
+		
+		user.setPwd(pwd);
+		
+		//if change email
+		if(!email.equals(user.getEmail())) {
+			http.setAttribute("email", user.getEmail());
+		}
+		
+		
 		return userService.editUser(user);
+	}
+	
+	@PostMapping("change_pwd")
+	public AuthRes changePwd(@RequestBody ChangePwdReq req, HttpSession http) {
+		//get HttpSession user data
+		String email = (String) http.getAttribute("email");
+		// not find Session email
+		if (!StringUtils.hasText(email)) {
+			return new AuthRes(AuthRtnCode.PLEASE_LOGIN_FIRST.getCode(), AuthRtnCode.PLEASE_LOGIN_FIRST.getMessage());
+		}
+		
+		//get HttpSession user data
+		return userService.changePwd(email, req.getOldPwd(), req.getNewPwd());
 	}
 
 }
