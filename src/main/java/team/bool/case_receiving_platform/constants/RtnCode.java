@@ -2,7 +2,9 @@ package team.bool.case_receiving_platform.constants;
 
 public enum RtnCode {
 
-	SUCCESSFUL("200", "successful!"),
+	SUCCESSFUL("200", "成功"),
+	DATA_ERROR("400","資料錯誤"),
+	ACCOUNT_NOT_FOUND("404","找不到帳戶"),
 	ERROR("400", "error!");
 	
 	private String code;

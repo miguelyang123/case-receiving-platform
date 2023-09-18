@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team.bool.case_receiving_platform.constants.AuthRtnCode;
 import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.service.ifs.UserService;
+import team.bool.case_receiving_platform.vo.AllUserRes;
 import team.bool.case_receiving_platform.vo.AuthRes;
 import team.bool.case_receiving_platform.vo.LoginReq;
 
@@ -77,8 +78,17 @@ public class UserController {
 //	@Transactional
 	@PostMapping("signup")
 	public AuthRes signup(@RequestBody User user,HttpSession httpSession) {
-		System.out.println(user.getEmail());
 		return userService.addNewUser(user);
+	}
+	
+	@GetMapping("get_all_user") 
+	public AllUserRes getAllUser(){
+		return userService.findAllUser();
+	}
+	
+	@PostMapping("edit_user")
+	public AuthRes editUser(@RequestBody User user) {
+		return userService.editUser(user);
 	}
 
 }

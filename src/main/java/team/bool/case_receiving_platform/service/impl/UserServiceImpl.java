@@ -1,5 +1,7 @@
 package team.bool.case_receiving_platform.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -11,10 +13,12 @@ import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import team.bool.case_receiving_platform.constants.AuthRtnCode;
+import team.bool.case_receiving_platform.constants.RtnCode;
 import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.entity.UserInfo;
 import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.UserService;
+import team.bool.case_receiving_platform.vo.AllUserRes;
 import team.bool.case_receiving_platform.vo.AuthRes;
 
 @Service
@@ -23,10 +27,10 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDao userDao;
 
-	private String emailPattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
-	private String pwdPattern = "^.{7,30}$";
-	private String namePattern = "^.{0,30}$";
-	private String phonePattern = "^(?:0|\\d{3}-?)(9|2)\\d{2}-?\\d{6}";
+	private String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+	private String pwdPattern = "^.{8,30}$";
+	private String namePattern = "^.{2,30}$";
+	private String phonePattern = "^(?:0|\\d{3}-?)(9|2)\\d{2}-?\\d{6}$";
 
 	// check Email And Pwd at DB
 	private AuthRes getUserInfoWithEmailAndPwd(String email, String pwd) {
@@ -44,7 +48,7 @@ public class UserServiceImpl implements UserService {
 			return new AuthRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
 		}
 		// check pwd
-		if (!matchesPwdAndHashPass(pwd,op.get().getPwd())) {
+		if (!matchesPwdAndHashPass(pwd, op.get().getPwd())) {
 			return new AuthRes(AuthRtnCode.WORONG_PASSWORD.getCode(), AuthRtnCode.WORONG_PASSWORD.getMessage());
 		}
 
@@ -95,9 +99,9 @@ public class UserServiceImpl implements UserService {
 		if (!StringUtils.hasText(phone) || !phone.matches(phonePattern)) {
 			return new AuthRes(AuthRtnCode.NAME_FORMAT_ERROR.getCode(), AuthRtnCode.NAME_FORMAT_ERROR.getMessage());
 		}
-		
-		//has same email
-		if(userDao.existsByEmail(user.getEmail())) {
+
+		// has same email
+		if (userDao.existsByEmail(user.getEmail())) {
 			return new AuthRes(AuthRtnCode.EMAIL_EXISTED.getCode(), AuthRtnCode.EMAIL_EXISTED.getMessage());
 		}
 
@@ -118,12 +122,12 @@ public class UserServiceImpl implements UserService {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		return encoder.encode(pwd);
 	}
-	
-	private boolean matchesPwdAndHashPass(String pwd,String hashPass) {
+
+	private boolean matchesPwdAndHashPass(String pwd, String hashPass) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		 return encoder.matches(pwd, hashPass);
+		return encoder.matches(pwd, hashPass);
 	}
-	
+
 	@Override
 	public AuthRes login(String email, String pwd) {
 
@@ -139,7 +143,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public AuthRes addNewUser(User user) {
 
-		// check email & pwd
+		// check Input
 		AuthRes checkRes = checkUserInput(user);
 		if (!checkRes.getCode().equals(AuthRtnCode.SUCCESSFUL.getCode())) {
 			return checkRes;
@@ -147,7 +151,7 @@ public class UserServiceImpl implements UserService {
 
 		// set UUID
 		user.setUuid(UUID.randomUUID());
-		
+
 		// encoder pwd
 		user.setPwd(encoderPwd(user.getPwd()));
 
@@ -168,5 +172,91 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
+
+	@Override
+	public AuthRes findUserbyUuid(UUID uuid) {
+
+		if (uuid == null) {
+			return new AuthRes(AuthRtnCode.DATA_ERROR.getCode(), AuthRtnCode.DATA_ERROR.getMessage());
+		}
+
+		Optional<User> user = userDao.findById(uuid);
+
+		if (user.isEmpty()) {
+			return new AuthRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
+		}
+
+		// change User to UserInfo and return
+		try {
+			// Successful get UserInfo
+			UserInfo userInfo = userToUserInfo(user.get());
+			return new AuthRes(AuthRtnCode.SUCCESSFUL_ADD_USER.getCode(), AuthRtnCode.SUCCESSFUL_ADD_USER.getMessage(),
+					userInfo);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new AuthRes(AuthRtnCode.DATA_ERROR.getCode(), e.getMessage());
+
+		}
+	}
+
+	public AllUserRes findAllUser() {
+
+		List<User> userList = userDao.findAll();
+
+		// userList <= 0 error
+		if (userList.size() <= 0) {
+			return new AllUserRes(RtnCode.DATA_ERROR.getCode(), RtnCode.DATA_ERROR.getMessage());
+
+		}
+
+		List<UserInfo> userInfoList = new ArrayList<>();
+
+		try {
+			for (User user : userList) {
+				userInfoList.add(userToUserInfo(user));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new AllUserRes(RtnCode.DATA_ERROR.getCode(), e.getMessage(), userInfoList);
+
+		}
+
+		return new AllUserRes(RtnCode.SUCCESSFUL.getCode(), RtnCode.SUCCESSFUL.getMessage(),
+				userInfoList);
+	}
+
+	@Override
+	public AuthRes editUser(User user) {
+
+		// check email & pwd & userName & phone
+		AuthRes checkRes = checkUserInput(user);
+		if (!checkRes.getCode().equals(AuthRtnCode.SUCCESSFUL.getCode())) {
+			return checkRes;
+		}
+		
+		// account not found
+		if(userDao.existsById(user.getUuid())) {
+			return new AuthRes(RtnCode.ACCOUNT_NOT_FOUND.getCode(), RtnCode.ACCOUNT_NOT_FOUND.getMessage());
+		}
+
+		// saver to DB
+		userDao.save(user);
+
+		// change User to UserInfo and return
+		try {
+			// Successful get UserInfo
+			UserInfo userInfo = userToUserInfo(user);
+			return new AuthRes(AuthRtnCode.SUCCESSFUL_ADD_USER.getCode(), AuthRtnCode.SUCCESSFUL_ADD_USER.getMessage(),
+					userInfo);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new AuthRes(AuthRtnCode.DATA_ERROR.getCode(), e.getMessage());
+
+		}
+	}
+
 
 }
