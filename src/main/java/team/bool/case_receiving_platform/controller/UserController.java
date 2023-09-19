@@ -1,21 +1,30 @@
 package team.bool.case_receiving_platform.controller;
 
-import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 import team.bool.case_receiving_platform.constants.AuthRtnCode;
 import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.AuthRes;
 import team.bool.case_receiving_platform.vo.LoginReq;
+
+import javax.servlet.http.HttpSession;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 
 @RestController
 @RequestMapping("api")
@@ -80,5 +89,33 @@ public class UserController {
 		System.out.println(user.getEmail());
 		return userService.addNewUser(user);
 	}
+    
+    // Upload a file to place into an Amazon S3 bucket.
+    @RequestMapping(value = "pdf_upload", method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView singleFileUpload(@RequestParam("file") MultipartFile file) {
+
+        try {
+
+            byte[] bytes = file.getBytes();
+            String name =  file.getOriginalFilename() ;
+
+//            System.out.println(bytes);
+//            System.out.println(name);
+            
+            File fileNew = new File("demo.pdf");
+            try {
+                FileOutputStream fout
+                        = new FileOutputStream(fileNew);
+                fout.write(bytes);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ModelAndView(new RedirectView("http://localhost:5173/personal_info_upload"));
+    }
 
 }
