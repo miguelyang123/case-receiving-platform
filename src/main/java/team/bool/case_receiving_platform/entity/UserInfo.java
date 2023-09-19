@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 // User with out pwd
-@JsonIgnoreProperties(value={"password"})
+@JsonIgnoreProperties(value = { "password" })
 public class UserInfo {
 
 	// UUID

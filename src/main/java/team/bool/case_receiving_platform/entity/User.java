@@ -57,17 +57,17 @@ public class User {
 	@Column(name = "locked_status")
 	private boolean lockedStatus;
 
-	
 	// 建構方法
 	public User() {
 		super();
 	}
 
-	public User(UUID uuid, String email, String pwd, String phone, int rating, String resumePdfPath,
+	public User(UUID uuid, String email, String userName, String pwd, String phone, int rating, String resumePdfPath,
 			boolean isAdministrator, boolean lockedStatus) {
 		super();
 		this.uuid = uuid;
 		this.email = email;
+		this.userName = userName;
 		this.pwd = pwd;
 		this.phone = phone;
 		this.rating = rating;
@@ -76,7 +76,6 @@ public class User {
 		this.lockedStatus = lockedStatus;
 	}
 
-	
 	// Getters and setters
 	public UUID getUuid() {
 		return uuid;
@@ -149,11 +148,5 @@ public class User {
 	public void setLockedStatus(boolean lockedStatus) {
 		this.lockedStatus = lockedStatus;
 	}
-
-    @Override
-    public String toString() {
-        return "User [uuid=" + uuid + ", email=" + email + ", userName=" + userName + ", pwd=" + pwd + ", phone=" + phone + ", rating=" + rating + ", resumePdfPath="
-               + resumePdfPath + ", isAdministrator=" + isAdministrator + ", lockedStatus=" + lockedStatus + "]";
-    }
 
 }

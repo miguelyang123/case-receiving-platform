@@ -1,11 +1,18 @@
 package team.bool.case_receiving_platform.service.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -20,12 +27,16 @@ import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.AllUserRes;
 import team.bool.case_receiving_platform.vo.AuthRes;
+import team.bool.case_receiving_platform.vo.MsgRes;
 
 @Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private JavaMailSender mailSender;
 
 	private String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 	private String pwdPattern = "^.{8,30}$";
@@ -56,7 +67,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			// Successful get UserInfo
 			UserInfo userInfo = userToUserInfo(op.get());
-			return new AuthRes(AuthRtnCode.SUCCESSFUL.getCode(), AuthRtnCode.SUCCESSFUL.getMessage(), userInfo);
+			return new AuthRes(AuthRtnCode.SUCCESSFUL_LOGIN.getCode(), AuthRtnCode.SUCCESSFUL_LOGIN.getMessage(), userInfo);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -205,7 +216,7 @@ public class UserServiceImpl implements UserService {
 
 		// userList <= 0 error
 		if (userList.size() <= 0) {
-			return new AllUserRes(RtnCode.DATA_ERROR.getCode(), RtnCode.DATA_ERROR.getMessage());
+			return new AllUserRes(RtnCode.ACCOUNT_NOT_FOUND.getCode(), RtnCode.ACCOUNT_NOT_FOUND.getMessage());
 
 		}
 
@@ -299,4 +310,88 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public MsgRes sendTokenToUserMail(String userEmail, String token) throws Exception  {
+		
+		// input is null & check input format
+		if (!StringUtils.hasText(userEmail) || !userEmail.matches(emailPattern)) {
+			return new MsgRes(AuthRtnCode.EMAIL_FORMAT_ERROR.getCode(), AuthRtnCode.EMAIL_FORMAT_ERROR.getMessage());
+		}
+		
+		// user not found
+		if (!userDao.existsByEmail(userEmail)) {
+			return new MsgRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
+		}
+		
+//			SimpleMailMessage message = new SimpleMailMessage();
+//			message.setFrom("javae7278@gmail.com");
+//			message.setTo(userEmail);
+//			message.setSubject("Speed接案網:重製密碼");
+//			
+//			String content = "<p>你好, </p>"
+//			            + "<p>您已要求重新設定密碼</p>"
+//			            + "<p>驗證碼:</p>"
+//			            + "<p>" + token + "</p>"
+//			            + "<br>"
+//			            + "<p>驗證碼有效時間為10分鐘</p>"
+//			            + "<p>感謝您使用Speed接案網</p>";
+//			
+//			message.setText(content);
+//			
+//			// send to user email
+//			mailSender.send(message);
+		
+		MimeMessage message = mailSender.createMimeMessage();              
+	    MimeMessageHelper helper = new MimeMessageHelper(message);
+	    
+	    helper.setFrom("javae7278@gmail.com", "Speed接案網");
+	    helper.setTo(userEmail);
+	    
+	    String subject = "已要求重新設定密碼";
+	    
+		String content = "<p>你好, </p>"
+        + "<p>您已要求重新設定密碼</p>"
+        + "<p>驗證碼:</p>"
+        + "<p>" + token + "</p>"
+        + "<br>"
+        + "<p>驗證碼有效時間為10分鐘</p>"
+        + "<p>感謝您使用Speed接案網</p>";
+
+	    helper.setSubject(subject);
+	     
+	    helper.setText(content, true);
+	    
+	    // send to user email
+	    mailSender.send(message);
+		
+		
+		return new MsgRes(AuthRtnCode.SUCCESSFUL_SEND_EMAIL.getCode(),AuthRtnCode.SUCCESSFUL_SEND_EMAIL.getMessage());
+	}
+
+	@Override
+	public MsgRes setNewPwd(String email, String newPwd) {
+		
+		Optional<User> op = userDao.findByEmail(email);
+	
+		// user not found
+		if (op.isEmpty()) {
+			return new MsgRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
+		}
+		// check newPwd
+		if (!StringUtils.hasText(newPwd) || !newPwd.matches(pwdPattern)) {
+			return new MsgRes(AuthRtnCode.PASSWORD_FORMAT_ERROR.getCode(),
+					AuthRtnCode.PASSWORD_FORMAT_ERROR.getMessage());
+		}
+		
+		User user = op.get();
+		
+		// set newPwd with encoder
+		user.setPwd(encoderPwd(newPwd));
+		
+		userDao.save(user);
+		
+		return new MsgRes(AuthRtnCode.SUCCESSFUL_CHANGE.getCode(), AuthRtnCode.SUCCESSFUL_CHANGE.getMessage());
+		
+	}
+	
 }

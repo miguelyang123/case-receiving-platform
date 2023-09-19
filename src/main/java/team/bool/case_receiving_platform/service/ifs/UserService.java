@@ -1,10 +1,14 @@
 package team.bool.case_receiving_platform.service.ifs;
 
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
+
+import javax.mail.MessagingException;
 
 import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.vo.AllUserRes;
 import team.bool.case_receiving_platform.vo.AuthRes;
+import team.bool.case_receiving_platform.vo.MsgRes;
 
 public interface UserService {
 
@@ -21,5 +25,10 @@ public interface UserService {
 	public AuthRes editUser(User user);
 
 	public AuthRes changePwd(String email, String oldPwd, String newPwd);
+	
+	public MsgRes sendTokenToUserMail(String email, String token) throws Exception;
 
+	public MsgRes setNewPwd(String email, String newPwd);
+
+	
 }

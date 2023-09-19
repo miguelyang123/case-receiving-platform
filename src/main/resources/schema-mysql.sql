@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `resume_pdf_path` varchar(200) DEFAULT NULL,
   `is_administrator` tinyint DEFAULT '0',
   `locked_status` tinyint DEFAULT '0',
-  PRIMARY KEY (`uuid`)
+  PRIMARY KEY (`uuid`),
+  UNIQUE KEY `email_UNIQUE` (`email`)
 );
 
 CREATE TABLE IF NOT EXISTS `case` (
@@ -31,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `case_contractor` (
   `is_accepted` tinyint DEFAULT '0',
   `accept_date` datetime DEFAULT NULL,
   `accepted_date` datetime DEFAULT NULL,
+  `case_rating` int DEFAULT '0',
   PRIMARY KEY (`case_id`,`contractor_uid`)
 );
 

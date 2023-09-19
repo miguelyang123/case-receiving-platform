@@ -11,35 +11,38 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
-
 @Entity
 @Table(name = "case_contractor")
 @IdClass(CaseContractorId.class)
 public class CaseContractor {
-	
+
 	// 雙ID
 	// 案子ID(PK)
 	@Id
 	@Column(name = "case_id")
 	private int caseId;
-	
+
 	// 接案帳戶ID(user uuid)(PK)
 	@Id
 	@Type(type = "uuid-char")
 	@Column(name = "contractor_uid")
 	private UUID contractorUid;
-	
+
 	// 是否成功接案
 	@Column(name = "is_accepted")
 	private boolean isAccepted;
-	
+
 	// 案子接案時間
 	@Column(name = "accept_date")
 	private LocalDateTime acceptDate;
-	
+
 	// 案子完成時間
 	@Column(name = "accepted_date")
 	private LocalDateTime acceptedDate;
+
+	// 案子完成評價
+	@Column(name = "case_rating")
+	private int caseRating;
 
 	// 建構方法
 	public CaseContractor() {
@@ -47,13 +50,14 @@ public class CaseContractor {
 	}
 
 	public CaseContractor(int caseId, UUID contractorUid, boolean isAccepted, LocalDateTime acceptDate,
-			LocalDateTime acceptedDate) {
+			LocalDateTime acceptedDate, int caseRating) {
 		super();
 		this.caseId = caseId;
 		this.contractorUid = contractorUid;
 		this.isAccepted = isAccepted;
 		this.acceptDate = acceptDate;
 		this.acceptedDate = acceptedDate;
+		this.caseRating = caseRating;
 	}
 
 	// Getters and setters
@@ -96,8 +100,13 @@ public class CaseContractor {
 	public void setAcceptedDate(LocalDateTime acceptedDate) {
 		this.acceptedDate = acceptedDate;
 	}
-	
-	
-	
-	
+
+	public int getCaseRating() {
+		return caseRating;
+	}
+
+	public void setCaseRating(int caseRating) {
+		this.caseRating = caseRating;
+	}
+
 }

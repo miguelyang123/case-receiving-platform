@@ -23,6 +23,9 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-core'
 	// mysql connector
 	implementation 'mysql:mysql-connector-java:8.0.31'
+	// Spring Boot Starter Mail
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
 }
