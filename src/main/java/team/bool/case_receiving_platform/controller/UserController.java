@@ -93,8 +93,8 @@ public class UserController {
     // Upload a file to place into an Amazon S3 bucket.
     @RequestMapping(value = "pdf_upload", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView singleFileUpload(@RequestParam("file") MultipartFile file) {
-
+    public ModelAndView singleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) {
+        
         try {
 
             byte[] bytes = file.getBytes();
@@ -102,8 +102,9 @@ public class UserController {
 
 //            System.out.println(bytes);
 //            System.out.println(name);
+//            System.out.println(uuid);
             
-            File fileNew = new File("demo.pdf");
+            File fileNew = new File("pdfs/"+uuid+".pdf");
             try {
                 FileOutputStream fout
                         = new FileOutputStream(fileNew);
