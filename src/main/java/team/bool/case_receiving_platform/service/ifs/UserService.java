@@ -16,8 +16,6 @@ public interface UserService {
 
 	public AuthRes findUserbyUuid(UUID uuid);
 
-//	public AllUserRes findAllUser();
-
 	public AuthRes editUser(User user);
 
 	public AuthRes changePwd(String email, String oldPwd, String newPwd);
