@@ -87,11 +87,6 @@ public class UserController {
 		return userService.addNewUser(user);
 	}
 	
-//	@GetMapping("get_all_user") 
-//	public AllUserRes getAllUser(){
-//		return userService.findAllUser();
-//	}
-	
 	@PostMapping("edit_user")
 	public AuthRes editUser(@RequestBody User user, HttpSession http) {
 		//get HttpSession user data
