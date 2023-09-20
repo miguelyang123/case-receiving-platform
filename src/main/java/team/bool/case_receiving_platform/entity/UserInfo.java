@@ -1,9 +1,9 @@
 package team.bool.case_receiving_platform.entity;
 
-import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.UUID;
 
 // User with out pwd
 @JsonIgnoreProperties(value={"password"})
@@ -27,7 +27,7 @@ public class UserInfo {
 
 	// 履歷 (檔案位置名稱)
 	private String resumePdfPath;
-
+	
 	// 身份權限(是否是管理者)
 	private boolean isAdministrator;
 
