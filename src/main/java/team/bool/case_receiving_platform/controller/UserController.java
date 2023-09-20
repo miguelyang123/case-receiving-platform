@@ -16,7 +16,7 @@ import team.bool.case_receiving_platform.constants.AuthRtnCode;
 import team.bool.case_receiving_platform.constants.RtnCode;
 import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.service.ifs.UserService;
-import team.bool.case_receiving_platform.vo.AllUserRes;
+import team.bool.case_receiving_platform.vo.UserListRes;
 import team.bool.case_receiving_platform.vo.AuthRes;
 import team.bool.case_receiving_platform.vo.ChangePwdReq;
 import team.bool.case_receiving_platform.vo.ForgotPwdReq;
@@ -87,10 +87,10 @@ public class UserController {
 		return userService.addNewUser(user);
 	}
 	
-	@GetMapping("get_all_user") 
-	public AllUserRes getAllUser(){
-		return userService.findAllUser();
-	}
+//	@GetMapping("get_all_user") 
+//	public AllUserRes getAllUser(){
+//		return userService.findAllUser();
+//	}
 	
 	@PostMapping("edit_user")
 	public AuthRes editUser(@RequestBody User user, HttpSession http) {

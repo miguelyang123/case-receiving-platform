@@ -25,7 +25,7 @@ import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.entity.UserInfo;
 import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.UserService;
-import team.bool.case_receiving_platform.vo.AllUserRes;
+import team.bool.case_receiving_platform.vo.UserListRes;
 import team.bool.case_receiving_platform.vo.AuthRes;
 import team.bool.case_receiving_platform.vo.MsgRes;
 
@@ -210,31 +210,31 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	public AllUserRes findAllUser() {
-
-		List<User> userList = userDao.findAll();
-
-		// userList <= 0 error
-		if (userList.size() <= 0) {
-			return new AllUserRes(RtnCode.ACCOUNT_NOT_FOUND.getCode(), RtnCode.ACCOUNT_NOT_FOUND.getMessage());
-
-		}
-
-		List<UserInfo> userInfoList = new ArrayList<>();
-
-		try {
-			for (User user : userList) {
-				userInfoList.add(userToUserInfo(user));
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new AllUserRes(RtnCode.DATA_ERROR.getCode(), e.getMessage(), userInfoList);
-
-		}
-
-		return new AllUserRes(RtnCode.SUCCESSFUL.getCode(), RtnCode.SUCCESSFUL.getMessage(), userInfoList);
-	}
+//	public AllUserRes findAllUser() {
+//
+//		List<User> userList = userDao.findAll();
+//
+//		// userList <= 0 error
+//		if (userList.size() <= 0) {
+//			return new AllUserRes(RtnCode.ACCOUNT_NOT_FOUND.getCode(), RtnCode.ACCOUNT_NOT_FOUND.getMessage());
+//
+//		}
+//
+//		List<UserInfo> userInfoList = new ArrayList<>();
+//
+//		try {
+//			for (User user : userList) {
+//				userInfoList.add(userToUserInfo(user));
+//			}
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return new AllUserRes(RtnCode.DATA_ERROR.getCode(), e.getMessage(), userInfoList);
+//
+//		}
+//
+//		return new AllUserRes(RtnCode.SUCCESSFUL.getCode(), RtnCode.SUCCESSFUL.getMessage(), userInfoList);
+//	}
 
 	@Override
 	public AuthRes editUser(User user) {

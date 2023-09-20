@@ -4,7 +4,7 @@ import java.util.List;
 
 import team.bool.case_receiving_platform.entity.UserInfo;
 
-public class AllUserRes {
+public class UserListRes {
 
 	private String code;
 
@@ -12,17 +12,17 @@ public class AllUserRes {
 
 	private List<UserInfo> userInfoList;
 
-	public AllUserRes() {
+	public UserListRes() {
 		super();
 	}
 
-	public AllUserRes(String code, String message) {
+	public UserListRes(String code, String message) {
 		super();
 		this.code = code;
 		this.message = message;
 	}
 
-	public AllUserRes(String code, String message, List<UserInfo> userInfoList) {
+	public UserListRes(String code, String message, List<UserInfo> userInfoList) {
 		super();
 		this.code = code;
 		this.message = message;

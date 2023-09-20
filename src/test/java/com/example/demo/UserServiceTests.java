@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,7 @@ public class UserServiceTests {
 
 	@Autowired
 	private UserDao userDao;
+	
 
 	@Autowired
 	private JavaMailSender mailSender;
@@ -84,6 +87,19 @@ public class UserServiceTests {
 		message.setText("內容：這是一封測試信件，恭喜您成功發送了唷");
 
 		mailSender.send(message);
+	}
+	
+	@Test
+	public void searchTest() {
+		List<User> userList = userDao.searchUserByInput(null,null,null,null);
+		if(userList.size()<=0) {
+			System.out.println("userList is " + userList.size());
+		}
+	
+		
+		for(User user: userList) {
+			SystemOutMsg(user);
+		}
 	}
 
 }

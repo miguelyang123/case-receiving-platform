@@ -1,12 +1,9 @@
 package team.bool.case_receiving_platform.service.ifs;
 
-import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
-import javax.mail.MessagingException;
-
 import team.bool.case_receiving_platform.entity.User;
-import team.bool.case_receiving_platform.vo.AllUserRes;
+import team.bool.case_receiving_platform.vo.UserListRes;
 import team.bool.case_receiving_platform.vo.AuthRes;
 import team.bool.case_receiving_platform.vo.MsgRes;
 
@@ -20,7 +17,7 @@ public interface UserService {
 
 	public AuthRes findUserbyUuid(UUID uuid);
 
-	public AllUserRes findAllUser();
+//	public AllUserRes findAllUser();
 
 	public AuthRes editUser(User user);
 
@@ -29,6 +26,5 @@ public interface UserService {
 	public MsgRes sendTokenToUserMail(String email, String token) throws Exception;
 
 	public MsgRes setNewPwd(String email, String newPwd);
-
 	
 }
