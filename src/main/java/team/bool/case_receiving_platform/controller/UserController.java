@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import team.bool.case_receiving_platform.constants.AuthRtnCode;
 import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.repository.UserDao;
@@ -101,7 +99,7 @@ public class UserController {
     // Upload a file to place into an Amazon S3 bucket.
     @RequestMapping(value = "pdf_upload", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView singleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) throws IOException {
+    public void singleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) throws IOException {
         
         try {
 
@@ -137,7 +135,10 @@ public class UserController {
 //            e.printStackTrace();
 //        }
         
-        return new ModelAndView(new RedirectView("http://localhost:5173/personal_info_upload"));
+//        return new ModelAndView(new RedirectView("http://localhost:5173/personal_info_upload"));
+        
+//        return null;
+    
     }
 
     @PostMapping("pdf_download")
