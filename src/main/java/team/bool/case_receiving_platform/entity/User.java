@@ -11,7 +11,6 @@ import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-// Json映照到UserInfo 忽略的欄位
 
 @Entity
 @Table(name = "user")

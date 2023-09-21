@@ -4,17 +4,20 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "case")
+@Table(name = "`case`")
 public class Case {
-	
+
 	// 案子ID(自動產生)(PK)(AI)
 	@Id
 	@Column(name = "id")
-	private int id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
 	// 案子名稱
 	@Column(name = "case_name")
@@ -50,16 +53,15 @@ public class Case {
 
 	// 上架/下架 (是否上架 0=下架)
 	@Column(name = "on_shelf")
-	private String onShelf;
+	private Boolean onShelf;
 
-	
 	// 建構方法
 	public Case() {
 		super();
 	}
 
-	public Case(int id, String caseName, int budget, String location, String content, LocalDateTime deadline,
-			LocalDateTime createdDate, String caseClass, String initiator, String onShelf) {
+	public Case(Integer id, String caseName, int budget, String location, String content, LocalDateTime deadline,
+			LocalDateTime createdDate, String caseClass, String initiator, Boolean onShelf) {
 		super();
 		this.id = id;
 		this.caseName = caseName;
@@ -72,14 +74,13 @@ public class Case {
 		this.initiator = initiator;
 		this.onShelf = onShelf;
 	}
-	
-	
+
 	// Getters and setters
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -147,11 +148,11 @@ public class Case {
 		this.initiator = initiator;
 	}
 
-	public String getOnShelf() {
+	public Boolean getOnShelf() {
 		return onShelf;
 	}
 
-	public void setOnShelf(String onShelf) {
+	public void setOnShelf(Boolean onShelf) {
 		this.onShelf = onShelf;
 	}
 

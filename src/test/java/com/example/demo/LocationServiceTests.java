@@ -11,7 +11,6 @@ import team.bool.case_receiving_platform.entity.Location;
 import team.bool.case_receiving_platform.repository.LocationDao;
 
 @SpringBootTest(classes = CaseReceivingPlatformApplication.class)
-
 public class LocationServiceTests {
 
 	@Autowired

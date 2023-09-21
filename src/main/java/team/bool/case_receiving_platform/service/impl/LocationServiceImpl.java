@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import team.bool.case_receiving_platform.constants.RtnCode;
 import team.bool.case_receiving_platform.entity.Location;
@@ -24,7 +25,7 @@ public class LocationServiceImpl implements LocationService {
 		List<Location> onsiteList = locationDao.selectOnsite();
 
 		// not find data
-		if (onsiteList.size() <= 0) {
+		if (CollectionUtils.isEmpty(onsiteList)) {
 			return new LocationListRes(RtnCode.DATA_NOT_FOUND.getCode(), RtnCode.DATA_NOT_FOUND.getMessage());
 		}
 
@@ -38,7 +39,7 @@ public class LocationServiceImpl implements LocationService {
 		List<Location> remoteList = locationDao.selectRemote();
 
 		// not find data
-		if (remoteList.size() <= 0) {
+		if (CollectionUtils.isEmpty(remoteList)) {
 			return new LocationListRes(RtnCode.DATA_NOT_FOUND.getCode(), RtnCode.DATA_NOT_FOUND.getMessage());
 		}
 		
