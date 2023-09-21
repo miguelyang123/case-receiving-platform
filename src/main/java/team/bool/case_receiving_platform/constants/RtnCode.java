@@ -4,6 +4,7 @@ public enum RtnCode {
 
 	SUCCESSFUL("200", "成功"),
 	DATA_ERROR("400","資料錯誤"),
+	DATA_NOT_FOUND("404","查無資訊"),
 	ACCOUNT_NOT_FOUND("404","找不到帳戶"),
 	INPUT_RATING_ERROR("400","評價輸入錯誤"),
 	ERROR("400", "error!");
