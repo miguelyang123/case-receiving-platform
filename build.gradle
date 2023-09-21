@@ -24,9 +24,9 @@ dependencies {
 	// mysql connector
 	implementation 'mysql:mysql-connector-java:8.0.31'
 	// https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
-	implementation 'org.apache.pdfbox:pdfbox:2.0.6'
+	// implementation 'org.apache.pdfbox:pdfbox:2.0.6'
 	// https://mvnrepository.com/artifact/org.springframework/spring-mock
-	testImplementation 'org.springframework:spring-test'
+	// testImplementation 'org.springframework:spring-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
 }

@@ -1,6 +1,5 @@
 package team.bool.case_receiving_platform.controller;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.StringUtils;
@@ -21,23 +20,15 @@ import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.AuthRes;
 import team.bool.case_receiving_platform.vo.LoginReq;
-import team.bool.case_receiving_platform.vo.PdfDownloadRes;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.Scanner;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 @RestController
@@ -117,9 +108,9 @@ public class UserController {
             byte[] bytes = file.getBytes();
             String name =  file.getOriginalFilename() ;
 
-//            System.out.println(bytes);
-//            System.out.println(name);
-//            System.out.println(uuid);
+            System.out.println(bytes);
+            System.out.println(name);
+            System.out.println(uuid);
             
             File fileNew = new File("pdfs/"+uuid+".pdf");
             try {
@@ -134,164 +125,29 @@ public class UserController {
             e.printStackTrace();
         }
         
-//        User user = new User();
-//        UUID uuidNew = UUID.fromString(uuid);
-//        Optional<User> res = userDao.findById(uuidNew);
-////        if(!res.isPresent()) {
-////            return new PdfDownloadRes(400, "error!", bytes);
-////        }
-//        user = res.get();
-//        System.out.println("user: "+user);
-//        
-//        if(file==null)
-//        {
-//            user.setResumePdf(null);
-//        }else {
-//            user.setResumePdf(file.getBytes());
-//        }
-//        userDao.save(user);
-        
-        return new ModelAndView(new RedirectView("http://localhost:5173/personal_info_upload"));
-    }
-
-//    @PostMapping("pdf_download")@RequestParam("file")
-//    public AuthRes pdfDownload(@RequestBody PdfDownloadReq req, HttpSession http) {
-//        
-//        System.out.println(req.getUuid());
-//       
-//        File fileNew = new File("pdfs/"+req.getUuid()+".pdf");
-//        try {
-//            FileInputStream fin
-//                    = new FileInputStream(fileNew);
-//            byte[] bytes = fin.readAllBytes();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        
-//        return null;
-//
-//    }
-
-    @PostMapping("pdf_download")
-    public PdfDownloadRes pdfDownload(HttpServletResponse response, @RequestParam("uuid") String uuid, HttpSession http) throws IOException, SerialException, SQLException {
-        
-        System.out.println(uuid);
-        String fileName = uuid+".pdf";
-//        PDDocument in = PDDocument.load(new File("pdfs/"+uuid+".pdf"));
-        byte[] pdfbytes = null;
-        try {
-            PDDocument in = PDDocument.load(new File("pdfs/"+uuid+".pdf"));
-            pdfbytes = toByteArray(in);
-            PDDocument out;
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-        response.setContentType("application/x-download");
-        if(System.getProperty("file.encoding").equals("GBK")) {
-            response.setHeader("Content-Disposition", "attachment;filename=\"" + new String(fileName.getBytes(), "ISO-8859-1") + "\"");
-        } else {
-            response.setHeader("Content-Disposition", uuid);
-        }
-        
-        OutputStream os = null;
-        
-        try {
-            os = response.getOutputStream();
-            os.write(pdfbytes);
-            os.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if(os != null) {
-                os.close();
-            }
-        }
-        
-        Scanner my_scanner = new Scanner(new BufferedReader(new FileReader("pdfs/"+uuid+".pdf"))); // you can put your file path here with file name
-        Blob my_blob= null; // create a BLOB
-        while(my_scanner.hasNext()) {
-//           byte[] my_byte_array= my_scanner.nextLine().getBytes(); // convert your file to Byte Array
-//           byte[] my_byte_array= my_scanner.nextLine().getBytes("GBK"); // convert your file to Byte Array
-           byte[] my_byte_array= my_scanner.nextLine().getBytes(); // convert your file to Byte Array
-           my_blob = new SerialBlob(my_byte_array); // convert Byte array to BLOB using SerialBlob() method
-        }
-//        byte[] pdfbytes01 = null;
-//        pdfbytes01 = my_blob.getBytes(1l, (int)my_blob.length());
-//        pdfbytes01 = my_blob.getBytes(0, 0);
+////      (測試)讀檔+存檔
+//        Path path = Paths.get("pdfs/"+uuid+".pdf");
+//        byte[] data = Files.readAllBytes(path);
 //        File fileNew = new File("pdfs/"+uuid+"(1)"+".pdf");
 //        try {
 //            FileOutputStream fout
 //                    = new FileOutputStream(fileNew);
-//            fout.write(pdfbytes01);
+//            fout.write(data);
 //        }catch (Exception e){
 //            e.printStackTrace();
 //        }
         
-        
-        
-//        File fileNew = new File("pdfs/"+uuid+".pdf");
-//        byte[] bytes = null;
-//        MultipartFile file = new 
-//        bytes = fileNew.getBytes();
-//        bytes = fileNew.
-//        InputStream inputStream = fileNew.getInputStream();
-//        try {
-//            FileInputStream fin
-//                    = new FileInputStream(fileNew);
-////            bytes = fin.readAllBytes();
-//            bytes = fin.readAllBytes();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-        
-//        User user = new User();
-//        UUID uuidNew = UUID.fromString(uuid);
-//        Optional<User> res = userDao.findById(uuidNew);
-//        if(!res.isPresent()) {
-//            return new PdfDownloadRes(400, "error!", bytes);
-//        }
-//        user = res.get();
-//        System.out.println("user: "+user);
-        
-
-//        MultipartFile
-//        File fileNew = new File("pdfs/"+uuid+".pdf");
-//        byte[] bytes = fileNew.getBytes();
-//        String name =  fileNew.getOriginalFilename() ;
-//
-//        try {
-//            FileOutputStream fout
-//                    = new FileOutputStream(fileNew);
-//            fout.write(bytes);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-        
-//        byte[] testFile = new byte[1024];
-//        InputStream inputStream = new ByteArrayInputStream(testFile);
-//        MultipartFile file = new MockMultipartFile(ContentType.APPLICATION_OCTET_STREAM.toString(), inputStream);
-//        MultipartFile file = new MockMultipartFile
-        
-//        File file = new File(filePath+fileName);
-//        FileInputStream fileInputStream = new FileInputStream(file);
-//        String[] fileNameSplit = fileName.split("\\.");
-//        MultipartFile multipartFile = new MockMultipartFile(fileNameSplit[0], fileName, "application/vnd.ms-excel", fileInputStream);
-        
-//        return new PdfDownloadRes(200, "ya!", pdfbytes);
-        return new PdfDownloadRes(200, "ya!", my_blob);
-
+        return new ModelAndView(new RedirectView("http://localhost:5173/personal_info_upload"));
     }
-    
-    private static byte[] toByteArray(PDDocument pdDoc) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            pdDoc.save(out);
-            pdDoc.close();
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
-        return out.toByteArray();
+
+    @PostMapping("pdf_download")
+    public byte[] pdfDownload(@RequestParam("uuid") String uuid) throws IOException {
+        
+        Path path = Paths.get("pdfs/"+uuid+".pdf");
+        byte[] data = Files.readAllBytes(path);
+
+        return data;
+
     }
     
 }
