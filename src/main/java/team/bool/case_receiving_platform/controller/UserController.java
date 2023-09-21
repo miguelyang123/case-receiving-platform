@@ -72,10 +72,10 @@ public class UserController {
 		return userService.getBalance(email, pwd);
 	}
 	
-	@PostMapping("logout")
-	public AuthRes logout(HttpSession httpSession) {
+	@GetMapping("logout")
+	public AuthRes logout(HttpSession http) {
 		// Invalid Session
-		httpSession.invalidate();
+		http.invalidate();
 		
 		return new AuthRes(AuthRtnCode.SUCCESSFUL_LOGOUT.getCode(),
 				AuthRtnCode.SUCCESSFUL_LOGOUT.getMessage());
