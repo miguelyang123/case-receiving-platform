@@ -1,6 +1,11 @@
 package team.bool.case_receiving_platform.entity;
 
+<<<<<<< HEAD
 import java.util.UUID;
+=======
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Type;
+>>>>>>> Feature/PDF_fetch(upload+download)
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +15,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+// Json映照到UserInfo 忽略的欄位
 
 // Json映照到UserInfo 忽略的欄位
 
@@ -49,6 +56,13 @@ public class User {
 	@Column(name = "resume_pdf_path")
 	private String resumePdfPath;
 
+//    // 履歷 (.pdf)
+//    //@Lob 通常与@Basic同时使用，提高访问速度
+//    @Lob 
+//    @Basic(fetch = FetchType.LAZY) 
+//    @Column(name="resume_pdf", columnDefinition="longblob", nullable=true) 
+//    private byte[] ResumePdf;
+
 	// 身份權限(是否是管理者)
 	@Column(name = "is_administrator")
 	private boolean isAdministrator;
@@ -62,6 +76,7 @@ public class User {
 		super();
 	}
 
+<<<<<<< HEAD
 	public User(UUID uuid, String email, String userName, String pwd, String phone, int rating, String resumePdfPath,
 			boolean isAdministrator, boolean lockedStatus) {
 		super();
@@ -77,6 +92,30 @@ public class User {
 	}
 
 	// Getters and setters
+=======
+    public User(UUID uuid, String email, String userName, String pwd, String phone, int rating, String resumePdfPath, boolean isAdministrator, boolean lockedStatus) {
+        super();
+        this.uuid = uuid;
+        this.email = email;
+        this.userName = userName;
+        this.pwd = pwd;
+        this.phone = phone;
+        this.rating = rating;
+        this.resumePdfPath = resumePdfPath;
+        this.isAdministrator = isAdministrator;
+        this.lockedStatus = lockedStatus;
+    }
+
+    public String getResumePdfPath() {
+        return resumePdfPath;
+    }
+
+    public void setResumePdfPath(String resumePdfPath) {
+        this.resumePdfPath = resumePdfPath;
+    }
+
+    // Getters and setters
+>>>>>>> Feature/PDF_fetch(upload+download)
 	public UUID getUuid() {
 		return uuid;
 	}
@@ -125,15 +164,7 @@ public class User {
 		this.rating = rating;
 	}
 
-	public String getResumePdfPath() {
-		return resumePdfPath;
-	}
-
-	public void setResumePdfPath(String resumePdfPath) {
-		this.resumePdfPath = resumePdfPath;
-	}
-
-	public boolean isAdministrator() {
+    public boolean isAdministrator() {
 		return isAdministrator;
 	}
 

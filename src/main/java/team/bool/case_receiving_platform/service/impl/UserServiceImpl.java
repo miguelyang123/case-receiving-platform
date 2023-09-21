@@ -1,5 +1,6 @@
 package team.bool.case_receiving_platform.service.impl;
 
+<<<<<<< HEAD
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+=======
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+>>>>>>> Feature/PDF_fetch(upload+download)
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -20,20 +27,28 @@ import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import team.bool.case_receiving_platform.constants.AuthRtnCode;
+<<<<<<< HEAD
 import team.bool.case_receiving_platform.constants.RtnCode;
+=======
+>>>>>>> Feature/PDF_fetch(upload+download)
 import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.entity.UserInfo;
 import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.UserService;
+<<<<<<< HEAD
 import team.bool.case_receiving_platform.vo.UserListRes;
 import team.bool.case_receiving_platform.vo.AuthRes;
 import team.bool.case_receiving_platform.vo.MsgRes;
+=======
+import team.bool.case_receiving_platform.vo.AuthRes;
+>>>>>>> Feature/PDF_fetch(upload+download)
 
 @Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
+<<<<<<< HEAD
 	
 	@Autowired
 	private JavaMailSender mailSender;
@@ -42,6 +57,13 @@ public class UserServiceImpl implements UserService {
 	private String pwdPattern = "^.{8,30}$";
 	private String namePattern = "^.{2,30}$";
 	private String phonePattern = "^(?:0|\\d{3}-?)(9|2)\\d{2}-?\\d{6}$";
+=======
+
+	private String emailPattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
+	private String pwdPattern = "^.{7,30}$";
+	private String namePattern = "^.{0,30}$";
+	private String phonePattern = "^(?:0|\\d{3}-?)(9|2)\\d{2}-?\\d{6}";
+>>>>>>> Feature/PDF_fetch(upload+download)
 
 	// check Email And Pwd at DB
 	private AuthRes getUserInfoWithEmailAndPwd(String email, String pwd) {
@@ -59,7 +81,11 @@ public class UserServiceImpl implements UserService {
 			return new AuthRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
 		}
 		// check pwd
+<<<<<<< HEAD
 		if (!matchesPwdAndHashPass(pwd, op.get().getPwd())) {
+=======
+		if (!matchesPwdAndHashPass(pwd,op.get().getPwd())) {
+>>>>>>> Feature/PDF_fetch(upload+download)
 			return new AuthRes(AuthRtnCode.WORONG_PASSWORD.getCode(), AuthRtnCode.WORONG_PASSWORD.getMessage());
 		}
 
@@ -67,7 +93,11 @@ public class UserServiceImpl implements UserService {
 		try {
 			// Successful get UserInfo
 			UserInfo userInfo = userToUserInfo(op.get());
+<<<<<<< HEAD
 			return new AuthRes(AuthRtnCode.SUCCESSFUL_LOGIN.getCode(), AuthRtnCode.SUCCESSFUL_LOGIN.getMessage(), userInfo);
+=======
+			return new AuthRes(AuthRtnCode.SUCCESSFUL.getCode(), AuthRtnCode.SUCCESSFUL.getMessage(), userInfo);
+>>>>>>> Feature/PDF_fetch(upload+download)
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -110,6 +140,14 @@ public class UserServiceImpl implements UserService {
 		if (!StringUtils.hasText(phone) || !phone.matches(phonePattern)) {
 			return new AuthRes(AuthRtnCode.NAME_FORMAT_ERROR.getCode(), AuthRtnCode.NAME_FORMAT_ERROR.getMessage());
 		}
+<<<<<<< HEAD
+=======
+		
+		//has same email
+		if(userDao.existsByEmail(user.getEmail())) {
+			return new AuthRes(AuthRtnCode.EMAIL_EXISTED.getCode(), AuthRtnCode.EMAIL_EXISTED.getMessage());
+		}
+>>>>>>> Feature/PDF_fetch(upload+download)
 
 		return new AuthRes(AuthRtnCode.SUCCESSFUL.getCode(), AuthRtnCode.SUCCESSFUL.getMessage(), null);
 	}
@@ -128,12 +166,21 @@ public class UserServiceImpl implements UserService {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		return encoder.encode(pwd);
 	}
+<<<<<<< HEAD
 
 	private boolean matchesPwdAndHashPass(String pwd, String hashPass) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		return encoder.matches(pwd, hashPass);
 	}
 
+=======
+	
+	private boolean matchesPwdAndHashPass(String pwd,String hashPass) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		 return encoder.matches(pwd, hashPass);
+	}
+	
+>>>>>>> Feature/PDF_fetch(upload+download)
 	@Override
 	public AuthRes login(String email, String pwd) {
 
@@ -149,11 +196,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public AuthRes addNewUser(User user) {
 
+<<<<<<< HEAD
 		// check Input
+=======
+		// check email & pwd
+>>>>>>> Feature/PDF_fetch(upload+download)
 		AuthRes checkRes = checkUserInput(user);
 		if (!checkRes.getCode().equals(AuthRtnCode.SUCCESSFUL.getCode())) {
 			return checkRes;
 		}
+<<<<<<< HEAD
 		// has same email
 		if (userDao.existsByEmail(user.getEmail())) {
 			return new AuthRes(AuthRtnCode.EMAIL_EXISTED.getCode(), AuthRtnCode.EMAIL_EXISTED.getMessage());
@@ -166,6 +218,16 @@ public class UserServiceImpl implements UserService {
 		user.setPwd(encoderPwd(user.getPwd()));
 
 		// save to DB
+=======
+
+		// set UUID
+		user.setUuid(UUID.randomUUID());
+		
+		// encoder pwd
+		user.setPwd(encoderPwd(user.getPwd()));
+
+		// saver to DB
+>>>>>>> Feature/PDF_fetch(upload+download)
 		userDao.save(user);
 
 		// change User to UserInfo and return
@@ -183,6 +245,7 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+<<<<<<< HEAD
 	@Override
 	public AuthRes findUserbyUuid(UUID uuid) {
 
@@ -368,4 +431,6 @@ public class UserServiceImpl implements UserService {
 		
 	}
 	
+=======
+>>>>>>> Feature/PDF_fetch(upload+download)
 }

@@ -1,14 +1,20 @@
 package team.bool.case_receiving_platform.controller;
 
+<<<<<<< HEAD
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+=======
+import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.mock.web.MockMultipartFile;
+>>>>>>> Feature/PDF_fetch(upload+download)
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.RestController;
 
 import net.bytebuddy.utility.RandomString;
@@ -22,6 +28,31 @@ import team.bool.case_receiving_platform.vo.ChangePwdReq;
 import team.bool.case_receiving_platform.vo.ForgotPwdReq;
 import team.bool.case_receiving_platform.vo.LoginReq;
 import team.bool.case_receiving_platform.vo.MsgRes;
+=======
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+import team.bool.case_receiving_platform.constants.AuthRtnCode;
+import team.bool.case_receiving_platform.entity.User;
+import team.bool.case_receiving_platform.repository.UserDao;
+import team.bool.case_receiving_platform.service.ifs.UserService;
+import team.bool.case_receiving_platform.vo.AuthRes;
+import team.bool.case_receiving_platform.vo.LoginReq;
+
+import javax.servlet.http.HttpSession;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+>>>>>>> Feature/PDF_fetch(upload+download)
 
 @RestController
 @RequestMapping("api")
@@ -29,6 +60,12 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+<<<<<<< HEAD
+=======
+	
+	@Autowired
+	private UserDao userDao;
+>>>>>>> Feature/PDF_fetch(upload+download)
 
 	@PostMapping("login")
 	public AuthRes login(@RequestBody LoginReq req, HttpSession http) {
@@ -64,25 +101,38 @@ public class UserController {
 		//get HttpSession user data
 		String email = (String) http.getAttribute("email");
 		String pwd = (String) http.getAttribute("password");
+<<<<<<< HEAD
 		// not find Session email
 		if (!StringUtils.hasText(email) || !StringUtils.hasText(pwd)) {
+=======
+		// not find Session id
+		if (!StringUtils.hasText(email)) {
+>>>>>>> Feature/PDF_fetch(upload+download)
 			return new AuthRes(AuthRtnCode.PLEASE_LOGIN_FIRST.getCode(), AuthRtnCode.PLEASE_LOGIN_FIRST.getMessage());
 		}
 
 		return userService.getBalance(email, pwd);
 	}
 	
+<<<<<<< HEAD
 	@GetMapping("logout")
 	public AuthRes logout(HttpSession httpSession) {
 		// Invalid Session
 		httpSession.invalidate();
 		
+=======
+	@PostMapping("logout")
+	public AuthRes logout(HttpSession httpSession) {
+		// Invalid Session
+		httpSession.invalidate();
+>>>>>>> Feature/PDF_fetch(upload+download)
 		return new AuthRes(AuthRtnCode.SUCCESSFUL_LOGOUT.getCode(),
 				AuthRtnCode.SUCCESSFUL_LOGOUT.getMessage());
 	}
 	
 //	@Transactional
 	@PostMapping("signup")
+<<<<<<< HEAD
 	public AuthRes signup(@RequestBody User user) {
 		return userService.addNewUser(user);
 	}
@@ -186,4 +236,66 @@ public class UserController {
 		
 		return result;
 	}
+=======
+	public AuthRes signup(@RequestBody User user,HttpSession httpSession) {
+		System.out.println(user.getEmail());
+		return userService.addNewUser(user);
+	}
+    
+    // Upload a file to place into an Amazon S3 bucket.
+    @RequestMapping(value = "pdf_upload", method = RequestMethod.POST)
+    @ResponseBody
+    public void singleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) throws IOException {
+        
+        try {
+
+            byte[] bytes = file.getBytes();
+            String name =  file.getOriginalFilename() ;
+
+            System.out.println(bytes);
+            System.out.println(name);
+            System.out.println(uuid);
+            
+            File fileNew = new File("pdfs/"+uuid+".pdf");
+            try {
+                FileOutputStream fout
+                        = new FileOutputStream(fileNew);
+                fout.write(bytes);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+////      (測試)讀檔+存檔
+//        Path path = Paths.get("pdfs/"+uuid+".pdf");
+//        byte[] data = Files.readAllBytes(path);
+//        File fileNew = new File("pdfs/"+uuid+"(1)"+".pdf");
+//        try {
+//            FileOutputStream fout
+//                    = new FileOutputStream(fileNew);
+//            fout.write(data);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+        
+//        return new ModelAndView(new RedirectView("http://localhost:5173/personal_info_upload"));
+        
+//        return null;
+    
+    }
+
+    @PostMapping("pdf_download")
+    public byte[] pdfDownload(@RequestParam("uuid") String uuid) throws IOException {
+        
+        Path path = Paths.get("pdfs/"+uuid+".pdf");
+        byte[] data = Files.readAllBytes(path);
+
+        return data;
+
+    }
+    
+>>>>>>> Feature/PDF_fetch(upload+download)
 }

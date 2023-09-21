@@ -1,5 +1,6 @@
 package team.bool.case_receiving_platform.service.ifs;
 
+<<<<<<< HEAD
 import java.util.UUID;
 
 import team.bool.case_receiving_platform.entity.User;
@@ -23,5 +24,17 @@ public interface UserService {
 	public MsgRes sendTokenToUserMail(String email, String token) throws Exception;
 
 	public MsgRes setNewPwd(String email, String newPwd);
+=======
+import team.bool.case_receiving_platform.entity.User;
+import team.bool.case_receiving_platform.vo.AuthRes;
+
+public interface UserService {
+	
+	public AuthRes login(String email, String pwd);
+	
+	public AuthRes getBalance(String email, String pwd);
+	
+	public AuthRes addNewUser(User user);
+>>>>>>> Feature/PDF_fetch(upload+download)
 	
 }
