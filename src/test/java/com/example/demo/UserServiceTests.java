@@ -1,20 +1,14 @@
 package com.example.demo;
 
-<<<<<<< HEAD
 import java.util.List;
-=======
->>>>>>> Feature/PDF_fetch(upload+download)
 
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<<<<<<< HEAD
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-=======
->>>>>>> Feature/PDF_fetch(upload+download)
 import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,7 +21,6 @@ import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.AuthRes;
 
-<<<<<<< HEAD
 @SpringBootTest(classes = CaseReceivingPlatformApplication.class)
 public class UserServiceTests {
 
@@ -41,36 +34,16 @@ public class UserServiceTests {
 	@Autowired
 	private JavaMailSender mailSender;
 
-=======
-
-@SpringBootTest(classes = CaseReceivingPlatformApplication.class)
-public class UserServiceTests {
-	
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private UserDao userDao;
-	
->>>>>>> Feature/PDF_fetch(upload+download)
 	@Test
 	public void daoTest() {
 //		AuthRes res = userService.login("test@gmail.com", "test");
 //		System.out.println(res.toString());
 //		System.out.println("test============");
-<<<<<<< HEAD
 
 		boolean bool = userDao.existsByEmail("test@gmail.com");
 		System.out.println(bool);
 	}
 
-=======
-		
-		boolean bool = userDao.existsByEmail("test@gmail.com");
-		System.out.println(bool);
-	}
-	
->>>>>>> Feature/PDF_fetch(upload+download)
 //	@Transactional
 	@Test
 	public void addNewUserTest() {
@@ -82,11 +55,7 @@ public class UserServiceTests {
 		AuthRes res = userService.addNewUser(user);
 		Assert.isTrue(!res.getMessage().equals(AuthRtnCode.SUCCESSFUL_ADD_USER.getMessage()), "add new fail!");
 		SystemOutMsg(res);
-<<<<<<< HEAD
 
-=======
-		
->>>>>>> Feature/PDF_fetch(upload+download)
 		user.setEmail("test3@gmail.com");
 		user.setPwd("testtest1");
 		user.setUserName("測試名稱");
@@ -94,19 +63,11 @@ public class UserServiceTests {
 		res = userService.addNewUser(user);
 		Assert.isTrue(res.getMessage().equals(AuthRtnCode.SUCCESSFUL_ADD_USER.getMessage()), "add new fail!");
 		SystemOutMsg(res);
-<<<<<<< HEAD
 
 		userDao.deleteById(res.getUserInfo().getUuid());
 
 	}
 
-=======
-		
-		userDao.deleteById(res.getUserInfo().getUuid());
-		
-	}
-	
->>>>>>> Feature/PDF_fetch(upload+download)
 	private void SystemOutMsg(Object res) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -116,7 +77,6 @@ public class UserServiceTests {
 			e.printStackTrace();
 		}
 	}
-<<<<<<< HEAD
 
 	@Test
 	public void sendTokenToUserMail() throws Exception {
@@ -142,7 +102,4 @@ public class UserServiceTests {
 		}
 	}
 
-=======
-	
->>>>>>> Feature/PDF_fetch(upload+download)
 }
