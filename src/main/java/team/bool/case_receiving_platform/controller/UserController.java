@@ -72,7 +72,7 @@ public class UserController {
 		return userService.getBalance(email, pwd);
 	}
 	
-	@PostMapping("logout")
+	@GetMapping("logout")
 	public AuthRes logout(HttpSession httpSession) {
 		// Invalid Session
 		httpSession.invalidate();
