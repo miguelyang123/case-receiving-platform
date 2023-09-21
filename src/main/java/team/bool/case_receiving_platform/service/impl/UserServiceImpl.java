@@ -214,16 +214,23 @@ public class UserServiceImpl implements UserService {
 	public AuthRes editUser(User user) {
 
 		// check email & pwd & userName & phone
+		user.setPwd("fakeinput");
 		AuthRes checkRes = checkUserInput(user);
 		if (!checkRes.getCode().equals(AuthRtnCode.SUCCESSFUL.getCode())) {
 			return checkRes;
 		}
 
 		Optional<User> op = userDao.findById(user.getUuid());
-
+		
 		// account not found
 		if (op.isEmpty()) {
 			return new AuthRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
+		}
+		// if change email check has same email
+		if(!op.get().getEmail().equals(user.getEmail())) {
+			if (userDao.existsByEmail(user.getEmail())) {
+				return new AuthRes(AuthRtnCode.EMAIL_EXISTED.getCode(), AuthRtnCode.EMAIL_EXISTED.getMessage());
+			}
 		}
 
 		// get DB Pwd with encoder

@@ -106,7 +106,9 @@ public class CaseServiceImpl implements CaseService {
 
 	@Override
 	public CaseListRes findCaseWithInput() {
-		// TODO Auto-generated method stub
+		
+//		caseDao.find
+		
 		return null;
 	}
 

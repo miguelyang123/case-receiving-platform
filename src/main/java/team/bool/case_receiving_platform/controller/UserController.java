@@ -108,24 +108,31 @@ public class UserController {
 	@PostMapping("edit_user")
 	public AuthRes editUser(@RequestBody User user, HttpSession http) {
 		//get HttpSession user data
-		String email = (String) http.getAttribute("email");
-		String pwd = (String) http.getAttribute("password");
+//		String email = (String) http.getAttribute("email");
+//		String pwd = (String) http.getAttribute("password");
 		// not login
-		if (!StringUtils.hasText(email) || !StringUtils.hasText(pwd)) {
-			return new AuthRes(AuthRtnCode.PLEASE_LOGIN_FIRST.getCode(), AuthRtnCode.PLEASE_LOGIN_FIRST.getMessage());
-		}
-		
-		user.setPwd(pwd);
+//		if (!StringUtils.hasText(email) || !StringUtils.hasText(pwd)) {
+//			return new AuthRes(AuthRtnCode.PLEASE_LOGIN_FIRST.getCode(), AuthRtnCode.PLEASE_LOGIN_FIRST.getMessage());
+//		}
 		
 		//if change email
-		if(!email.equals(user.getEmail())) {
-			http.setAttribute("email", user.getEmail());
-		}
+//		if(!email.equals(user.getEmail())) {
+//			http.setAttribute("email", user.getEmail());
+//		}
 		
 		// set time 1 hour
-		http.setMaxInactiveInterval(60 * 60);
+//		http.setMaxInactiveInterval(60 * 60);
+
+		AuthRes result = userService.editUser(user);
 		
-		return userService.editUser(user);
+		// edit own email
+		if(result.getCode().equals(AuthRtnCode.SUCCESSFUL_CHANGE.getCode())) {
+			if(result.getUserInfo().getUuid().equals(user.getUuid())) {
+				http.setAttribute("email", user.getEmail());
+			}
+		}
+
+		return result;
 	}
 	
 	@PostMapping("change_pwd")
