@@ -15,14 +15,14 @@ CREATE TABLE IF NOT EXISTS `user` (
 CREATE TABLE IF NOT EXISTS `case` (
   `id` int NOT NULL AUTO_INCREMENT,
   `case_name` varchar(100) DEFAULT NULL,
-  `budget` int DEFAULT '0',
+  `budget` int NOT NULL DEFAULT '0',
   `location` varchar(30) DEFAULT NULL,
   `content` text,
   `deadline` datetime DEFAULT NULL,
   `created_date` datetime DEFAULT NULL,
   `case_class` varchar(50) DEFAULT NULL,
   `initiator` varchar(45) DEFAULT NULL,
-  `on_shelf` tinyint DEFAULT '1',
+  `on_shelf` tinyint NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 );
 

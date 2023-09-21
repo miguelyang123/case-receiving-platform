@@ -115,10 +115,16 @@ public class UserController {
 	}
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@GetMapping("logout")
 	public AuthRes logout(HttpSession httpSession) {
+=======
+	@GetMapping("logout")
+	public AuthRes logout(HttpSession http) {
+>>>>>>> Feature/add-case-service
 		// Invalid Session
 		httpSession.invalidate();
+		http.invalidate();
 		
 =======
 	@PostMapping("logout")
