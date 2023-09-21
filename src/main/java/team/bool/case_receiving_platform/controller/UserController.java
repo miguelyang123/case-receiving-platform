@@ -1,27 +1,35 @@
 package team.bool.case_receiving_platform.controller;
 
-import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
-
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import net.bytebuddy.utility.RandomString;
+import org.springframework.web.multipart.MultipartFile;
 import team.bool.case_receiving_platform.constants.AuthRtnCode;
 import team.bool.case_receiving_platform.constants.RtnCode;
 import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.service.ifs.UserService;
-import team.bool.case_receiving_platform.vo.UserListRes;
 import team.bool.case_receiving_platform.vo.AuthRes;
 import team.bool.case_receiving_platform.vo.ChangePwdReq;
 import team.bool.case_receiving_platform.vo.ForgotPwdReq;
 import team.bool.case_receiving_platform.vo.LoginReq;
 import team.bool.case_receiving_platform.vo.MsgRes;
+
+import javax.servlet.http.HttpSession;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("api")
@@ -186,4 +194,60 @@ public class UserController {
 		
 		return result;
 	}
+	
+    // Upload a file to place into an Amazon S3 bucket.
+    @RequestMapping(value = "pdf_upload", method = RequestMethod.POST)
+    @ResponseBody
+    public void singleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) throws IOException {
+        
+        try {
+
+            byte[] bytes = file.getBytes();
+            String name =  file.getOriginalFilename() ;
+
+            System.out.println(bytes);
+            System.out.println(name);
+            System.out.println(uuid);
+            
+            File fileNew = new File("pdfs/"+uuid+".pdf");
+            try {
+                FileOutputStream fout
+                        = new FileOutputStream(fileNew);
+                fout.write(bytes);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+////      (測試)讀檔+存檔
+//        Path path = Paths.get("pdfs/"+uuid+".pdf");
+//        byte[] data = Files.readAllBytes(path);
+//        File fileNew = new File("pdfs/"+uuid+"(1)"+".pdf");
+//        try {
+//            FileOutputStream fout
+//                    = new FileOutputStream(fileNew);
+//            fout.write(data);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+        
+//        return new ModelAndView(new RedirectView("http://localhost:5173/personal_info_upload"));
+        
+//        return null;
+    
+    }
+
+    @PostMapping("pdf_download")
+    public byte[] pdfDownload(@RequestParam("uuid") String uuid) throws IOException {
+        
+        Path path = Paths.get("pdfs/"+uuid+".pdf");
+        byte[] data = Files.readAllBytes(path);
+
+        return data;
+
+    }
+	
 }
