@@ -1,11 +1,6 @@
 package team.bool.case_receiving_platform.entity;
 
-<<<<<<< HEAD
 import java.util.UUID;
-=======
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Type;
->>>>>>> Feature/PDF_fetch(upload+download)
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -76,7 +71,6 @@ public class User {
 		super();
 	}
 
-<<<<<<< HEAD
 	public User(UUID uuid, String email, String userName, String pwd, String phone, int rating, String resumePdfPath,
 			boolean isAdministrator, boolean lockedStatus) {
 		super();
@@ -92,30 +86,6 @@ public class User {
 	}
 
 	// Getters and setters
-=======
-    public User(UUID uuid, String email, String userName, String pwd, String phone, int rating, String resumePdfPath, boolean isAdministrator, boolean lockedStatus) {
-        super();
-        this.uuid = uuid;
-        this.email = email;
-        this.userName = userName;
-        this.pwd = pwd;
-        this.phone = phone;
-        this.rating = rating;
-        this.resumePdfPath = resumePdfPath;
-        this.isAdministrator = isAdministrator;
-        this.lockedStatus = lockedStatus;
-    }
-
-    public String getResumePdfPath() {
-        return resumePdfPath;
-    }
-
-    public void setResumePdfPath(String resumePdfPath) {
-        this.resumePdfPath = resumePdfPath;
-    }
-
-    // Getters and setters
->>>>>>> Feature/PDF_fetch(upload+download)
 	public UUID getUuid() {
 		return uuid;
 	}
