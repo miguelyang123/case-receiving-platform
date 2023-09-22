@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,16 @@ public class CaseServiceTests {
 		Case savedCase = caseDao.save(newCase);
 		System.out.println(savedCase.getId());
 //		caseService.addNewCase(newCase);
+	}
+	
+	@Test
+	public void findCaseTest() {
+//		List<Case> caseList = caseDao.searchCaseByInput(null);
+//		
+//		for(Case fCase : caseList) {
+//			System.out.println(fCase.getCaseName());
+//		}
+		
 	}
 
 }
