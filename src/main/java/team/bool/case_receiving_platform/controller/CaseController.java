@@ -16,14 +16,12 @@ public class CaseController {
 
 	@Autowired
 	private CaseService caseService;
-	
+
 	@PostMapping("add_new_case")
 	public CaseListRes addNewCase(@RequestBody Case newCase) {
-		
+
 		return caseService.addNewCase(newCase);
 
 	}
-	
-	
-	
+
 }

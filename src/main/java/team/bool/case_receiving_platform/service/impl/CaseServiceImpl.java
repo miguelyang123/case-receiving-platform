@@ -3,9 +3,11 @@ package team.bool.case_receiving_platform.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -105,11 +107,31 @@ public class CaseServiceImpl implements CaseService {
 	}
 
 	@Override
-	public CaseListRes findCaseWithInput() {
+	public CaseListRes findCaseWithInput(
+			String searchKeyword,
+			Integer minBudget,
+			Integer maxBudget,
+			String location,
+			LocalDateTime deadlineFrom,
+			LocalDateTime deadlineTo,
+			String caseClass,
+			String initiator,
+			Boolean onShelf
+			) {
+
+		// check Budget input
+		if(minBudget != null && minBudget < 0) {
+			return new CaseListRes(CaseRtnCode.BUDGET_INPUT_ERROR.getCode(), CaseRtnCode.BUDGET_INPUT_ERROR.getMessage());
+		}
+		if(maxBudget != null && maxBudget < 0) {
+			return new CaseListRes(CaseRtnCode.BUDGET_INPUT_ERROR.getCode(), CaseRtnCode.BUDGET_INPUT_ERROR.getMessage());
+		}
 		
-//		caseDao.find
 		
-		return null;
+		//search case DB
+		List<Case> caseList = caseDao.searchCaseByInput(searchKeyword, minBudget, maxBudget, location, deadlineFrom, deadlineTo, caseClass, initiator, onShelf);
+		
+		return new CaseListRes(CaseRtnCode.SUCCESSFUL.getCode(), CaseRtnCode.SUCCESSFUL.getMessage(), new ArrayList<Case>(caseList));
 	}
 
 }

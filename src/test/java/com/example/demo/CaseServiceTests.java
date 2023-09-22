@@ -11,6 +11,7 @@ import team.bool.case_receiving_platform.CaseReceivingPlatformApplication;
 import team.bool.case_receiving_platform.entity.Case;
 import team.bool.case_receiving_platform.repository.CaseDao;
 import team.bool.case_receiving_platform.service.ifs.CaseService;
+import team.bool.case_receiving_platform.vo.CaseListRes;
 
 @SpringBootTest(classes = CaseReceivingPlatformApplication.class)
 public class CaseServiceTests {
@@ -54,11 +55,20 @@ public class CaseServiceTests {
 	
 	@Test
 	public void findCaseTest() {
-//		List<Case> caseList = caseDao.searchCaseByInput(null);
-//		
-//		for(Case fCase : caseList) {
-//			System.out.println(fCase.getCaseName());
-//		}
+		 LocalDateTime now = LocalDateTime.now();
+		 System.out.println("====================================");
+		System.out.println("nowTime"+now);
+		
+//		List<Case> caseList = caseDao.searchCaseByInput(null, null,null,null,null,null,null,null,null);
+//		List<Case> caseList = caseDao.searchCaseByInput(now);
+		
+		CaseListRes result = caseService.findCaseWithInput(null, 0, 10000, null, null, null, null, null, null);
+		
+		List<Case> caseList = result.getCaseList();
+		
+		for(Case fCase : caseList) {
+			System.out.println(fCase.getCaseName());
+		}
 		
 	}
 
