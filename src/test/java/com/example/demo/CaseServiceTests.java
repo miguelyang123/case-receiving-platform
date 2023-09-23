@@ -20,7 +20,7 @@ public class CaseServiceTests {
 	private CaseService caseService;
 
 	@Autowired
-	public CaseDao caseDao;
+	private CaseDao caseDao;
 	
 	@Test
 	public void test() {

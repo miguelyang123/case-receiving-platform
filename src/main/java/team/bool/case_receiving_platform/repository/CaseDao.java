@@ -7,10 +7,12 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import team.bool.case_receiving_platform.entity.Case;
 import team.bool.case_receiving_platform.entity.User;
 
+@Repository
 public interface CaseDao extends JpaRepository<Case, Integer> {
 
 	public Optional<Case> findByCaseName(String caseName);
