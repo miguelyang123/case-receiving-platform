@@ -15,7 +15,8 @@ public interface CaseDao extends JpaRepository<Case, Integer> {
 
 	public Optional<Case> findByCaseName(String caseName);
 	
-	@Query(value = "SELECT id, case_name, budget, location, content, deadline, created_date, case_class, initiator, on_shelf FROM `case` where "
+	@Query(value = "SELECT id, case_name, budget, location, content, deadline, created_date, case_class, initiator, on_shelf, "
+			+ " current_status, progress_percentage, accepted_date, case_rating FROM `case` where "
 			+ " CONCAT_WS(case_name, content) like case when :searchKeyword is null then '%%' else concat('%',:searchKeyword,'%') end and "
 			+ " case when :minBudget is null then budget is not null else budget >= :minBudget end and "
 			+ " case when :maxBudget is null then budget is not null else budget <= :maxBudget end and "
@@ -24,7 +25,9 @@ public interface CaseDao extends JpaRepository<Case, Integer> {
 			+ " case when :deadlineTo is null then deadline is not null else deadline <= :deadlineTo end and "
 			+ " case when :caseClass is null then case_class is not null else case_class = :caseClass end and "
 			+ " case when :inputInitiator is null then initiator is not null else initiator = :inputInitiator end and "
-			+ " case when :onShelf is null then on_shelf is not null else on_shelf = :onShelf end "
+			+ " case when :onShelf is null then on_shelf is not null else on_shelf = :onShelf end and "
+			+ " case when :currentStatus is null then current_status is not null else current_status = :currentStatus end and "
+			+ " case when :caseRating is null then case_rating is not null else case_rating = :caseRating end"
 			, nativeQuery = true)
 	public List<Case> searchCaseByInput(
 			@Param("searchKeyword") String searchKeyword,
@@ -35,7 +38,9 @@ public interface CaseDao extends JpaRepository<Case, Integer> {
 			@Param("deadlineTo") LocalDateTime deadlineTo,
 			@Param("caseClass") String caseClass,
 			@Param("inputInitiator") String initiator,
-			@Param("onShelf") Boolean onShelf
+			@Param("onShelf") Boolean onShelf,
+			@Param("currentStatus") String currentStatus,
+			@Param("caseRating") Integer caseRating
 			);
 	
 	

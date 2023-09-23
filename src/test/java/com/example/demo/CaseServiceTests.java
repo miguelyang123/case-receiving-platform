@@ -37,7 +37,7 @@ public class CaseServiceTests {
 	@Test
 	public void addTest() {
 		Case newCase = new Case(null, "測試案件", 10000, "1A", "我是內文", LocalDateTime.now(), LocalDateTime.now(), null,
-				"2d94e2dd-f635-4e59-bbe6-9f48bdf23fab", true);
+				"2d94e2dd-f635-4e59-bbe6-9f48bdf23fab", true,null,0, null,0);
 //		newCase.setId(9);
 //		newCase.setCaseName("測試案件");
 //		newCase.setBudget(10000);
@@ -62,7 +62,7 @@ public class CaseServiceTests {
 //		List<Case> caseList = caseDao.searchCaseByInput(null, null,null,null,null,null,null,null,null);
 //		List<Case> caseList = caseDao.searchCaseByInput(now);
 		
-		CaseListRes result = caseService.findCaseWithInput(null, 0, 10000, null, null, null, null, null, null);
+		CaseListRes result = caseService.findCaseWithInput(null, 0, 10000, null, null, null, null, null, null, null, null);
 		
 		List<Case> caseList = result.getCaseList();
 		

@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 import team.bool.case_receiving_platform.constants.CaseRtnCode;
 import team.bool.case_receiving_platform.entity.Case;
+import team.bool.case_receiving_platform.repository.CaseContractorDao;
 import team.bool.case_receiving_platform.repository.CaseDao;
 import team.bool.case_receiving_platform.service.ifs.CaseService;
 import team.bool.case_receiving_platform.vo.CaseListRes;
@@ -22,6 +23,9 @@ public class CaseServiceImpl implements CaseService {
 
 	@Autowired
 	public CaseDao caseDao;
+	
+	@Autowired
+	public CaseContractorDao caseContractorDao;
 
 	private CaseListRes checkCaseInput(Case checkCase) {
 
@@ -101,9 +105,22 @@ public class CaseServiceImpl implements CaseService {
 	}
 
 	@Override
-	public CaseListRes editCase() {
-		// TODO Auto-generated method stub
-		return null;
+	public CaseListRes editCase(Case newCase) {
+		
+		// check input
+		CaseListRes result = checkCaseInput(newCase);
+		if (!result.getCode().equals(CaseRtnCode.SUCCESSFUL.getCode())) {
+			return result;
+		}
+		
+		//set CaseClass
+		newCase = setCaseClassWithLocation(newCase);
+		
+		//save to DB
+		Case savedCase = caseDao.save(newCase);
+		
+		return new CaseListRes(CaseRtnCode.SUCCESSFUL_UPDATE.getCode(), CaseRtnCode.SUCCESSFUL_UPDATE.getMessage(),
+				new ArrayList<Case>(Arrays.asList(savedCase)));
 	}
 
 	@Override
@@ -116,7 +133,9 @@ public class CaseServiceImpl implements CaseService {
 			LocalDateTime deadlineTo,
 			String caseClass,
 			String initiator,
-			Boolean onShelf
+			Boolean onShelf,
+			String currentStatus,
+			Integer caseRating
 			) {
 
 		// check Budget input
@@ -126,12 +145,22 @@ public class CaseServiceImpl implements CaseService {
 		if(maxBudget != null && maxBudget < 0) {
 			return new CaseListRes(CaseRtnCode.BUDGET_INPUT_ERROR.getCode(), CaseRtnCode.BUDGET_INPUT_ERROR.getMessage());
 		}
+		// check caseRating input
+		if(caseRating != null && caseRating < 0 && caseRating > 5) {
+			return new CaseListRes(CaseRtnCode.RATING_INPUT_ERROR.getCode(), CaseRtnCode.RATING_INPUT_ERROR.getMessage());
+		}
+		
 		
 		
 		//search case DB
-		List<Case> caseList = caseDao.searchCaseByInput(searchKeyword, minBudget, maxBudget, location, deadlineFrom, deadlineTo, caseClass, initiator, onShelf);
+		List<Case> caseList = caseDao.searchCaseByInput(searchKeyword, minBudget, maxBudget, location,
+				deadlineFrom, deadlineTo, caseClass, initiator, onShelf, currentStatus, caseRating);
 		
 		return new CaseListRes(CaseRtnCode.SUCCESSFUL.getCode(), CaseRtnCode.SUCCESSFUL.getMessage(), new ArrayList<Case>(caseList));
 	}
+
+	public void getContractorWithCaseId() {
+		
+	};
 
 }

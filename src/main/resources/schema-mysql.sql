@@ -23,6 +23,10 @@ CREATE TABLE IF NOT EXISTS `case` (
   `case_class` varchar(50) DEFAULT NULL,
   `initiator` varchar(45) DEFAULT NULL,
   `on_shelf` tinyint NOT NULL DEFAULT '1',
+  `current_status` varchar(45) DEFAULT NULL,
+  `progress_percentage` int DEFAULT '0',
+  `accepted_date` datetime DEFAULT NULL,
+  `case_rating` int DEFAULT '0',
   PRIMARY KEY (`id`)
 );
 
@@ -31,9 +35,14 @@ CREATE TABLE IF NOT EXISTS `case_contractor` (
   `contractor_uid` varchar(45) NOT NULL,
   `is_accepted` tinyint DEFAULT '0',
   `accept_date` datetime DEFAULT NULL,
-  `accepted_date` datetime DEFAULT NULL,
-  `case_rating` int DEFAULT '0',
   PRIMARY KEY (`case_id`,`contractor_uid`)
+);
+
+
+CREATE TABLE IF NOT EXISTS `case_current_status` (
+  `status_name` varchar(45) NOT NULL,
+  `status_zh_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`status_name`)
 );
 
 CREATE TABLE IF NOT EXISTS `location` (

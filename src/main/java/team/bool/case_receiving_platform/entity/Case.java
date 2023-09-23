@@ -55,13 +55,30 @@ public class Case {
 	@Column(name = "on_shelf")
 	private Boolean onShelf;
 
+	// 目前案子狀態
+	@Column(name = "current_status")
+	private String currentStatus;
+
+	// 進度百分比
+	@Column(name = "progress_percentage")
+	private int progressPercentage;
+
+	// 案子完成時間
+	@Column(name = "accepted_date")
+	private LocalDateTime acceptedDate;
+
+	// 案子完成評價
+	@Column(name = "case_rating")
+	private int caseRating;
+
 	// 建構方法
 	public Case() {
 		super();
 	}
 
 	public Case(Integer id, String caseName, int budget, String location, String content, LocalDateTime deadline,
-			LocalDateTime createdDate, String caseClass, String initiator, Boolean onShelf) {
+			LocalDateTime createdDate, String caseClass, String initiator, Boolean onShelf, String currentStatus,
+			int progressPercentage, LocalDateTime acceptedDate, int caseRating) {
 		super();
 		this.id = id;
 		this.caseName = caseName;
@@ -73,6 +90,10 @@ public class Case {
 		this.caseClass = caseClass;
 		this.initiator = initiator;
 		this.onShelf = onShelf;
+		this.currentStatus = currentStatus;
+		this.progressPercentage = progressPercentage;
+		this.acceptedDate = acceptedDate;
+		this.caseRating = caseRating;
 	}
 
 	// Getters and setters
@@ -154,6 +175,38 @@ public class Case {
 
 	public void setOnShelf(Boolean onShelf) {
 		this.onShelf = onShelf;
+	}
+
+	public String getCurrentStatus() {
+		return currentStatus;
+	}
+
+	public void setCurrentStatus(String currentStatus) {
+		this.currentStatus = currentStatus;
+	}
+
+	public int getProgressPercentage() {
+		return progressPercentage;
+	}
+
+	public void setProgressPercentage(int progressPercentage) {
+		this.progressPercentage = progressPercentage;
+	}
+
+	public LocalDateTime getAcceptedDate() {
+		return acceptedDate;
+	}
+
+	public void setAcceptedDate(LocalDateTime acceptedDate) {
+		this.acceptedDate = acceptedDate;
+	}
+
+	public int getCaseRating() {
+		return caseRating;
+	}
+
+	public void setCaseRating(int caseRating) {
+		this.caseRating = caseRating;
 	}
 
 }

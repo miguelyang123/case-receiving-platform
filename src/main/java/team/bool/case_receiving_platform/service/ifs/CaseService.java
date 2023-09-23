@@ -9,9 +9,12 @@ public interface CaseService {
 
 	public CaseListRes addNewCase(Case newCase);
 
-	public CaseListRes editCase();
+	public CaseListRes editCase(Case newCase);
 
 	public CaseListRes findCaseWithInput(String searchKeyword, Integer minBudget, Integer maxBudget, String location,
-			LocalDateTime deadlineFrom, LocalDateTime deadlineTo, String caseClass, String initiator, Boolean onShelf);
+			LocalDateTime deadlineFrom, LocalDateTime deadlineTo, String caseClass, String initiator, Boolean onShelf,
+			String currentStatus, Integer caseRating);
+
+	public void getContractorWithCaseId();
 
 }

@@ -27,6 +27,16 @@ public class CaseController {
 
 	}
 	
+	
+	@PostMapping("edit_case")
+	public CaseListRes editCase(@RequestBody Case newCase) {
+		
+		return caseService.editCase(newCase);
+	}
+
+	
+	
+	
     @PostMapping("add_new_case_fix")
     public CaseListRes addNewCaseFix(@RequestBody CaseAddTemp newCase) {
         

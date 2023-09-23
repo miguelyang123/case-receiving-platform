@@ -33,7 +33,9 @@ public class SearchCaseController {
 			@RequestParam(name = "deadlineTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deadlineTo,
 			@RequestParam(name = "caseClass", required = false) String caseClass,
 			@RequestParam(name = "initiator", required = false) String initiator,
-			@RequestParam(name = "onShelf", required = false) Boolean onShelf
+			@RequestParam(name = "onShelf", required = false) Boolean onShelf,
+			@RequestParam(name = "currentStatus", required = false) String currentStatus,
+			@RequestParam(name = "caseRating", required = false) Integer caseRating
 			) {
 		
 		// Param String is "" 
@@ -47,7 +49,7 @@ public class SearchCaseController {
 			initiator = null;
 		}
 		
-		return caseService.findCaseWithInput(searchKeyword, minBudget, maxBudget, location, deadlineFrom, deadlineTo, caseClass, initiator, onShelf);
+		return caseService.findCaseWithInput(searchKeyword, minBudget, maxBudget, location, deadlineFrom, deadlineTo, caseClass, initiator, onShelf, currentStatus, caseRating);
 	}
 	
 	

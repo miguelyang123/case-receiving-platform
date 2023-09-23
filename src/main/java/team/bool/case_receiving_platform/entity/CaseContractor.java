@@ -36,28 +36,17 @@ public class CaseContractor {
 	@Column(name = "accept_date")
 	private LocalDateTime acceptDate;
 
-	// 案子完成時間
-	@Column(name = "accepted_date")
-	private LocalDateTime acceptedDate;
-
-	// 案子完成評價
-	@Column(name = "case_rating")
-	private int caseRating;
-
 	// 建構方法
 	public CaseContractor() {
 		super();
 	}
 
-	public CaseContractor(int caseId, UUID contractorUid, boolean isAccepted, LocalDateTime acceptDate,
-			LocalDateTime acceptedDate, int caseRating) {
+	public CaseContractor(int caseId, UUID contractorUid, boolean isAccepted, LocalDateTime acceptDate) {
 		super();
 		this.caseId = caseId;
 		this.contractorUid = contractorUid;
 		this.isAccepted = isAccepted;
 		this.acceptDate = acceptDate;
-		this.acceptedDate = acceptedDate;
-		this.caseRating = caseRating;
 	}
 
 	// Getters and setters
@@ -91,22 +80,6 @@ public class CaseContractor {
 
 	public void setAcceptDate(LocalDateTime acceptDate) {
 		this.acceptDate = acceptDate;
-	}
-
-	public LocalDateTime getAcceptedDate() {
-		return acceptedDate;
-	}
-
-	public void setAcceptedDate(LocalDateTime acceptedDate) {
-		this.acceptedDate = acceptedDate;
-	}
-
-	public int getCaseRating() {
-		return caseRating;
-	}
-
-	public void setCaseRating(int caseRating) {
-		this.caseRating = caseRating;
 	}
 
 }
