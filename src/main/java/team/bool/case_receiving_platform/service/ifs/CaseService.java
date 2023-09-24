@@ -3,6 +3,8 @@ package team.bool.case_receiving_platform.service.ifs;
 import java.time.LocalDateTime;
 
 import team.bool.case_receiving_platform.entity.Case;
+import team.bool.case_receiving_platform.entity.CaseContractor;
+import team.bool.case_receiving_platform.vo.CaseContractorListRes;
 import team.bool.case_receiving_platform.vo.CaseListRes;
 
 public interface CaseService {
@@ -15,6 +17,6 @@ public interface CaseService {
 			LocalDateTime deadlineFrom, LocalDateTime deadlineTo, String caseClass, String initiator, Boolean onShelf,
 			String currentStatus, Integer caseRating);
 
-	public void contractorAcceptCase(String contractorId, int caseId);
+	public CaseContractorListRes contractorAcceptCase(CaseContractor newCaseContractor);
 
 }

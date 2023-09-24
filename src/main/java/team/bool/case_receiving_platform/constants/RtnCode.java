@@ -8,7 +8,8 @@ public enum RtnCode {
 	ACCOUNT_NOT_FOUND("404","找不到帳戶"),
 	ACCOUNT_NOT_FOUND_WITH_ID("404","此案子無人接案"),
 	INPUT_RATING_ERROR("400","評價輸入錯誤"),
-	INPUT_CASE_ID_NULL("400","輸入ID為空值"),
+	INPUT_CASE_ID_NULL("400","輸入案子ID為空值"),
+	INPUT_USER_ID_NULL("400","輸入帳戶ID為空值"),
 	ERROR("400", "error!");
 	
 	private String code;
