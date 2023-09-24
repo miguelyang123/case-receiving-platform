@@ -159,7 +159,7 @@ public class CaseServiceImpl implements CaseService {
 		return new CaseListRes(CaseRtnCode.SUCCESSFUL.getCode(), CaseRtnCode.SUCCESSFUL.getMessage(), new ArrayList<Case>(caseList));
 	}
 
-	public void getContractorWithCaseId() {
+	public void contractorAcceptCase(String contractorId, int caseId) {
 		
 	};
 

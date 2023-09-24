@@ -15,6 +15,6 @@ public interface CaseService {
 			LocalDateTime deadlineFrom, LocalDateTime deadlineTo, String caseClass, String initiator, Boolean onShelf,
 			String currentStatus, Integer caseRating);
 
-	public void getContractorWithCaseId();
+	public void contractorAcceptCase(String contractorId, int caseId);
 
 }

@@ -9,4 +9,6 @@ import team.bool.case_receiving_platform.entity.CaseContractorId;
 @Repository
 public interface CaseContractorDao extends JpaRepository<CaseContractor, CaseContractorId>{
 
+	
+	
 }

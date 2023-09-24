@@ -25,4 +25,11 @@ public interface UserDao extends JpaRepository<User, UUID> {
 			+ " case when :inputLockedStatus is null then locked_status is not null else locked_status = :inputLockedStatus end ", nativeQuery = true)
 	public List<User> searchUserByInput(@Param("inputName") String userName, @Param("inputRating") Integer minRating,
 			@Param("inputIsAdministrator") Boolean isAdministrator, @Param("inputLockedStatus") Boolean lockedStatus);
+	
+	
+	@Query(value = " SELECT u.uuid, u.email, u.pwd, u.user_name, u.phone, u.rating, u.resume_pdf_path, u.is_administrator, u.locked_status "
+			+ " FROM user u JOIN case_contractor c "
+			+ " ON u.uuid = c.contractor_uid "
+			+ " WHERE c.case_id = :caseId ", nativeQuery = true)
+	public List<User> searchUserByCaseId(@Param("caseId") int caseId);
 }

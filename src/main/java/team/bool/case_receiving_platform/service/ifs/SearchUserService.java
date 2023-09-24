@@ -8,4 +8,5 @@ public interface SearchUserService {
 	
 	public UserListRes searchUserToList(String userName, Integer minRating, Boolean isAdministrator, Boolean lockedStatus);
 	
+	public UserListRes searchUserByCaseId(Integer caseId);
 }

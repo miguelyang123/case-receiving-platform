@@ -101,5 +101,19 @@ public class UserServiceTests {
 			SystemOutMsg(user);
 		}
 	}
+	
+	@Test
+	public void searchByCaseIdTest() {
+		List<User> userList = userDao.searchUserByCaseId(3);
+
+		if(userList.size()<=0) {
+			System.out.println("userList is " + userList.size());
+		}
+	
+		
+		for(User user: userList) {
+			SystemOutMsg(user);
+		}
+	}
 
 }
