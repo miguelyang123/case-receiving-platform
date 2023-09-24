@@ -20,6 +20,7 @@ import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.AuthRes;
+import team.bool.case_receiving_platform.vo.ContractorInfoVo;
 
 @SpringBootTest(classes = CaseReceivingPlatformApplication.class)
 public class UserServiceTests {
@@ -104,15 +105,16 @@ public class UserServiceTests {
 	
 	@Test
 	public void searchByCaseIdTest() {
-		List<User> userList = userDao.searchUserByCaseId(3);
+		 List<ContractorInfoVo> userList = userDao.searchUserByCaseId(1);
 
 		if(userList.size()<=0) {
 			System.out.println("userList is " + userList.size());
 		}
 	
 		
-		for(User user: userList) {
-			SystemOutMsg(user);
+		for(ContractorInfoVo user: userList) {
+//			SystemOutMsg(user);
+			System.out.println(user.getUserName());
 		}
 	}
 

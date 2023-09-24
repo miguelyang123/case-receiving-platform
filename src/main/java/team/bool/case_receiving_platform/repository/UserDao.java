@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import team.bool.case_receiving_platform.entity.User;
+import team.bool.case_receiving_platform.vo.ContractorInfoVo;
 
 @Repository
 public interface UserDao extends JpaRepository<User, UUID> {
@@ -27,9 +28,17 @@ public interface UserDao extends JpaRepository<User, UUID> {
 			@Param("inputIsAdministrator") Boolean isAdministrator, @Param("inputLockedStatus") Boolean lockedStatus);
 	
 	
-	@Query(value = " SELECT u.uuid, u.email, u.pwd, u.user_name, u.phone, u.rating, u.resume_pdf_path, u.is_administrator, u.locked_status "
-			+ " FROM user u JOIN case_contractor c "
-			+ " ON u.uuid = c.contractor_uid "
-			+ " WHERE c.case_id = :caseId ", nativeQuery = true)
-	public List<User> searchUserByCaseId(@Param("caseId") int caseId);
+	@Query(value = " SELECT new team.bool.case_receiving_platform.vo.ContractorInfoVo(u.uuid, u.email, u.userName, u.phone, u.rating, u.resumePdfPath, u.isAdministrator, u.lockedStatus, c.isAccepted , c.acceptDate) "
+			+ " FROM User as u JOIN CaseContractor as c "
+			+ " ON u.uuid = c.contractorUid "
+			+ " WHERE c.caseId = :inputCaseId ")
+	public List<ContractorInfoVo> searchUserByCaseId(@Param("inputCaseId") int caseId);
+	
+
+	
+//	@Query(value = " SELECT u.uuid, u.email, u.pwd, u.user_name, u.phone, u.rating, u.resume_pdf_path, u.is_administrator, u.locked_status "
+//			+ " FROM user u JOIN case_contractor c "
+//			+ " ON u.uuid = c.contractor_uid "
+//			+ " WHERE c.case_id = :caseId ", nativeQuery = true)
+//	public List<User> searchUserByCaseId(@Param("caseId") int caseId);
 }

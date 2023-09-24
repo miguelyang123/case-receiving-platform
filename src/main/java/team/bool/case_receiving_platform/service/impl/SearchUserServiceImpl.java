@@ -84,35 +84,5 @@ public class SearchUserServiceImpl implements SearchUserService {
 		return new UserListRes(RtnCode.SUCCESSFUL.getCode(), RtnCode.SUCCESSFUL.getMessage(), userInfoList);
 	}
 	
-	public UserListRes searchUserByCaseId(Integer caseId) {
-		
-		if(caseId == null) {
-			return new UserListRes(RtnCode.INPUT_CASE_ID_NULL.getCode(), RtnCode.INPUT_CASE_ID_NULL.getMessage());
-		}
-		
-		// Get from DB
-		List<User> userList = userDao.searchUserByCaseId(caseId);
-		
-		if(userList.size() <= 0) {
-			return new UserListRes(RtnCode.ACCOUNT_NOT_FOUND_WITH_ID.getCode(), RtnCode.ACCOUNT_NOT_FOUND_WITH_ID.getMessage());
-		}
-		
-		// user change to userInfo
-		try {
-			List<UserInfo> userInfoList = new ArrayList<>();
-			for (User user : userList) {
-				userInfoList.add(userToUserInfo(user));
-			}
-			
-			return new UserListRes(RtnCode.SUCCESSFUL.getCode(), RtnCode.SUCCESSFUL.getMessage(), userInfoList);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new UserListRes(RtnCode.DATA_ERROR.getCode(), e.getMessage());
-
-		}
-		
-
-	}
-	
 
 }
