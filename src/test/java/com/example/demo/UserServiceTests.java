@@ -92,7 +92,7 @@ public class UserServiceTests {
 	
 	@Test
 	public void searchTest() {
-		List<User> userList = userDao.searchUserByInput(null,null,null,null);
+		List<User> userList = userDao.searchUserByInput(null,null,null,null, null);
 		if(userList.size()<=0) {
 			System.out.println("userList is " + userList.size());
 		}

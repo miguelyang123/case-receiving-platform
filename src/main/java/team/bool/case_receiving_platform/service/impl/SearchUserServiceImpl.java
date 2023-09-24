@@ -2,6 +2,7 @@ package team.bool.case_receiving_platform.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,7 @@ public class SearchUserServiceImpl implements SearchUserService {
 	}
 
 	@Override
-	public UserListRes searchUserToList(String userName, Integer minRating, Boolean isAdministrator,
+	public UserListRes searchUserToList(String uuid, String userName, Integer minRating, Boolean isAdministrator,
 			Boolean lockedStatus) {
 
 		// check rating
@@ -67,7 +68,7 @@ public class SearchUserServiceImpl implements SearchUserService {
 		}
 
 		// search user list
-		List<User> userList = userDao.searchUserByInput(userName, minRating, isAdministrator, lockedStatus);
+		List<User> userList = userDao.searchUserByInput(uuid, userName, minRating, isAdministrator, lockedStatus);
 
 		// user change to userInfo
 		List<UserInfo> userInfoList = new ArrayList<>();

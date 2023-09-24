@@ -1,5 +1,7 @@
 package team.bool.case_receiving_platform.controller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,13 +28,14 @@ public class SearchUserController {
 
 	@GetMapping("with_Input")
 	public UserListRes searchUserWithInput(
+			@RequestParam(name = "uuid", required = false) String uuid,
 			@RequestParam(name = "name", required = false) String userName,
 			@RequestParam(name = "rating", required = false) Integer minRating,
 			@RequestParam(name = "admin", required = false) Boolean isAdministrator,
 			@RequestParam(name = "locked", required = false) Boolean lockedStatus
 			) {
 		
-		return sService.searchUserToList(userName, minRating, isAdministrator, lockedStatus);
+		return sService.searchUserToList(uuid, userName, minRating, isAdministrator, lockedStatus);
 	}
 
 }
