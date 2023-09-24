@@ -1,6 +1,7 @@
 package team.bool.case_receiving_platform.service.ifs;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import team.bool.case_receiving_platform.entity.Case;
 import team.bool.case_receiving_platform.entity.CaseContractor;
@@ -16,7 +17,5 @@ public interface CaseService {
 	public CaseListRes findCaseWithInput(String searchKeyword, Integer minBudget, Integer maxBudget, String location,
 			LocalDateTime deadlineFrom, LocalDateTime deadlineTo, String caseClass, String initiator, Boolean onShelf,
 			String currentStatus, Integer caseRating);
-
-	public CaseContractorListRes contractorAcceptCase(CaseContractor newCaseContractor);
 
 }

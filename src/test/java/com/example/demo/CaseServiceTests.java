@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import team.bool.case_receiving_platform.CaseReceivingPlatformApplication;
 import team.bool.case_receiving_platform.entity.Case;
+import team.bool.case_receiving_platform.entity.CaseContractor;
+import team.bool.case_receiving_platform.repository.CaseContractorDao;
 import team.bool.case_receiving_platform.repository.CaseDao;
 import team.bool.case_receiving_platform.service.ifs.CaseService;
 import team.bool.case_receiving_platform.vo.CaseListRes;
@@ -21,7 +25,10 @@ public class CaseServiceTests {
 
 	@Autowired
 	private CaseDao caseDao;
-	
+
+	@Autowired
+	private CaseContractorDao caseContractorDao;
+
 	@Test
 	public void test() {
 
@@ -37,7 +44,7 @@ public class CaseServiceTests {
 	@Test
 	public void addTest() {
 		Case newCase = new Case(null, "測試案件", 10000, "1A", "我是內文", LocalDateTime.now(), LocalDateTime.now(), null,
-				"2d94e2dd-f635-4e59-bbe6-9f48bdf23fab", true,null,0, null,0);
+				"2d94e2dd-f635-4e59-bbe6-9f48bdf23fab", true, null, 0, null, 0);
 //		newCase.setId(9);
 //		newCase.setCaseName("測試案件");
 //		newCase.setBudget(10000);
@@ -52,24 +59,58 @@ public class CaseServiceTests {
 		System.out.println(savedCase.getId());
 //		caseService.addNewCase(newCase);
 	}
-	
+
 	@Test
 	public void findCaseTest() {
-		 LocalDateTime now = LocalDateTime.now();
-		 System.out.println("====================================");
-		System.out.println("nowTime"+now);
-		
+		LocalDateTime now = LocalDateTime.now();
+		System.out.println("====================================");
+		System.out.println("nowTime" + now);
+
 //		List<Case> caseList = caseDao.searchCaseByInput(null, null,null,null,null,null,null,null,null);
 //		List<Case> caseList = caseDao.searchCaseByInput(now);
-		
-		CaseListRes result = caseService.findCaseWithInput(null, 0, 10000, null, null, null, null, null, null, null, null);
-		
+
+		CaseListRes result = caseService.findCaseWithInput(null, 0, 10000, null, null, null, null, null, null, null,
+				null);
+
 		List<Case> caseList = result.getCaseList();
-		
-		for(Case fCase : caseList) {
+
+		for (Case fCase : caseList) {
 			System.out.println(fCase.getCaseName());
 		}
-		
+
+	}
+
+	@Test
+	public void chooseContractorsTest() {
+
+		List<String> idList = new ArrayList<>(
+				Arrays.asList("e451beb8-fc91-472b-933b-b96a0e8c853b", "e81b75d7-78b2-4ff0-aea5-a91b49b5aaaf"));
+
+//		String userIdListStr = String.join(",", idList);
+
+//		System.out.println(userIdListStr);
+
+//		caseContractorDao.chooseContractors(1 , userIdListStr);
+		int resNum = caseContractorDao.chooseContractors(1, idList, false);
+		System.out.println("resNum : " + resNum);
+	}
+
+	@Test
+	public void findByCaseIdAndUserIdListTest() {
+
+		List<String> idList = new ArrayList<>(
+				Arrays.asList("e451beb8-fc91-472b-933b-b96a0e8c853b", "e81b75d7-78b2-4ff0-aea5-a91b49b5aaaf"));
+
+		List<CaseContractor> res = caseContractorDao.findByCaseIdAndUserIdList(1, idList);
+
+		res.forEach(item -> {
+			
+			System.out.println(item.getCaseId());
+			System.out.println(item.getContractorUid());
+			System.out.println(item.getIsAccepted());
+			System.out.println(item.getAcceptDate());
+
+		});
 	}
 
 }

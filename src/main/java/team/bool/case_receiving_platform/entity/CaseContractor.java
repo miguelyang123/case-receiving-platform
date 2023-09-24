@@ -66,11 +66,11 @@ public class CaseContractor {
 		this.contractorUid = contractorUid;
 	}
 
-	public boolean isAccepted() {
+	public boolean getIsAccepted() {
 		return isAccepted;
 	}
 
-	public void setAccepted(boolean isAccepted) {
+	public void setIsAccepted(boolean isAccepted) {
 		this.isAccepted = isAccepted;
 	}
 
