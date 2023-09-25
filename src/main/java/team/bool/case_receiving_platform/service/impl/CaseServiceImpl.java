@@ -98,9 +98,9 @@ public class CaseServiceImpl implements CaseService {
 		newCase.setCreatedDate(LocalDateTime.now());
 
 		// onShelf default 1
-//		if (newCase.getOnShelf() == null) {
-//			newCase.setOnShelf(true);
-//		}
+		if (newCase.getOnShelf() == null) {
+			newCase.setOnShelf(true);
+		}
 
 		// save to DB
 		Case savedCase = caseDao.save(newCase);
