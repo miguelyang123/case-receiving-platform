@@ -53,11 +53,11 @@ public class Case {
 
 	// 上架/下架 (是否上架 0=下架)
 	@Column(name = "on_shelf")
-	private Boolean onShelf;
+	private Boolean onShelf = true;
 
 	// 目前案子狀態
 	@Column(name = "current_status")
-	private String currentStatus;
+	private String currentStatus = "Not Started";
 
 	// 進度百分比
 	@Column(name = "progress_percentage")

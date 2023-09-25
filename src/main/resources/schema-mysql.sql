@@ -23,12 +23,13 @@ CREATE TABLE IF NOT EXISTS `case` (
   `case_class` varchar(50) DEFAULT NULL,
   `initiator` varchar(45) DEFAULT NULL,
   `on_shelf` tinyint NOT NULL DEFAULT '1',
-  `current_status` varchar(45) DEFAULT NULL,
+  `current_status` varchar(45) DEFAULT 'Not Started',
   `progress_percentage` int DEFAULT '0',
   `accepted_date` datetime DEFAULT NULL,
   `case_rating` int DEFAULT '0',
   PRIMARY KEY (`id`)
 );
+
 
 CREATE TABLE IF NOT EXISTS `case_contractor` (
   `case_id` int NOT NULL,
