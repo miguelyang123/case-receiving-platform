@@ -110,19 +110,25 @@ public class CaseServiceImpl implements CaseService {
 	}
 
 	@Override
-	public CaseListRes editCase(Case newCase) {
+	public CaseListRes editCase(Case editedCase) {
 
 		// check input
-		CaseListRes result = checkCaseInput(newCase);
+		CaseListRes result = checkCaseInput(editedCase);
 		if (!result.getCode().equals(CaseRtnCode.SUCCESSFUL.getCode())) {
 			return result;
 		}
 
-		// set CaseClass
-		newCase = setCaseClassWithLocation(newCase);
 
+		
+		// set CaseClass
+		editedCase = setCaseClassWithLocation(editedCase);
+
+		// set create date time
+		editedCase.setCreatedDate(caseDao.findById(editedCase.getId()).get().getCreatedDate());
+
+		
 		// save to DB
-		Case savedCase = caseDao.save(newCase);
+		Case savedCase = caseDao.save(editedCase);
 
 		return new CaseListRes(CaseRtnCode.SUCCESSFUL_UPDATE.getCode(), CaseRtnCode.SUCCESSFUL_UPDATE.getMessage(),
 				new ArrayList<Case>(Arrays.asList(savedCase)));
