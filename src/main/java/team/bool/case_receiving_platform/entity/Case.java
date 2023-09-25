@@ -64,8 +64,8 @@ public class Case {
 	private int progressPercentage;
 
 	// 案子完成時間
-	@Column(name = "accepted_date")
-	private LocalDateTime acceptedDate;
+	@Column(name = "completion_date")
+	private LocalDateTime completionDate;
 
 	// 案子完成評價
 	@Column(name = "case_rating")
@@ -78,7 +78,7 @@ public class Case {
 
 	public Case(Integer id, String caseName, int budget, String location, String content, LocalDateTime deadline,
 			LocalDateTime createdDate, String caseClass, String initiator, Boolean onShelf, String currentStatus,
-			int progressPercentage, LocalDateTime acceptedDate, int caseRating) {
+			int progressPercentage, LocalDateTime completionDate, int caseRating) {
 		super();
 		this.id = id;
 		this.caseName = caseName;
@@ -92,7 +92,7 @@ public class Case {
 		this.onShelf = onShelf;
 		this.currentStatus = currentStatus;
 		this.progressPercentage = progressPercentage;
-		this.acceptedDate = acceptedDate;
+		this.completionDate = completionDate;
 		this.caseRating = caseRating;
 	}
 
@@ -193,12 +193,12 @@ public class Case {
 		this.progressPercentage = progressPercentage;
 	}
 
-	public LocalDateTime getAcceptedDate() {
-		return acceptedDate;
+	public LocalDateTime getCompletionDate() {
+		return completionDate;
 	}
 
-	public void setAcceptedDate(LocalDateTime acceptedDate) {
-		this.acceptedDate = acceptedDate;
+	public void setCompletionDate(LocalDateTime completionDate) {
+		this.completionDate = completionDate;
 	}
 
 	public int getCaseRating() {

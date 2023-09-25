@@ -18,7 +18,7 @@ public interface CaseDao extends JpaRepository<Case, Integer> {
 	public Optional<Case> findByCaseName(String caseName);
 	
 	@Query(value = "SELECT id, case_name, budget, location, content, deadline, created_date, case_class, initiator, on_shelf, "
-			+ " current_status, progress_percentage, accepted_date, case_rating FROM `case` where "
+			+ " current_status, progress_percentage, completion_date, case_rating FROM `case` where "
 			+ " CONCAT_WS(case_name, content) like case when :searchKeyword is null then '%%' else concat('%',:searchKeyword,'%') end and "
 			+ " case when :minBudget is null then budget is not null else budget >= :minBudget end and "
 			+ " case when :maxBudget is null then budget is not null else budget <= :maxBudget end and "
