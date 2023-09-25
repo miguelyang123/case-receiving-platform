@@ -8,7 +8,7 @@ import team.bool.case_receiving_platform.vo.ContractorListRes;
 
 public interface CaseContractorService {
 
-	public ContractorListRes searchUserByCaseId(Integer caseId);
+	public ContractorListRes searchUserByCaseIdAndAccepted(Integer caseId, Boolean isAccepted);
 	
 	public CaseContractorListRes contractorAcceptCase(CaseContractor newCaseContractor);
 	

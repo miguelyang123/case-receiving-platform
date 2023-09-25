@@ -21,9 +21,9 @@ public class EditCasePageController {
 	private CaseContractorService ccService;
 
 	@GetMapping("search_user_by_caseid")
-	public ContractorListRes searchUserByCaseId(@RequestParam(name = "caseId") Integer caseId) {
+	public ContractorListRes searchUserByCaseIdAndAccepted(@RequestParam(name = "caseId") Integer caseId, @RequestParam(name = "isAccepted") Boolean isAccepted) {
 
-		return ccService.searchUserByCaseId(caseId);
+		return ccService.searchUserByCaseIdAndAccepted(caseId,isAccepted);
 	}
 
 	@PostMapping("choose_contractors")

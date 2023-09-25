@@ -105,7 +105,7 @@ public class UserServiceTests {
 	
 	@Test
 	public void searchByCaseIdTest() {
-		 List<ContractorInfoVo> userList = userDao.searchUserByCaseId(1);
+		 List<ContractorInfoVo> userList = userDao.searchUserByCaseId(1,true);
 
 		if(userList.size()<=0) {
 			System.out.println("userList is " + userList.size());

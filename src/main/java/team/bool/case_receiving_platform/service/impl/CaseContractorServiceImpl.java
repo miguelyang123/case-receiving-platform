@@ -28,14 +28,16 @@ public class CaseContractorServiceImpl implements CaseContractorService {
 	public CaseContractorDao caseContractorDao;
 
 	@Override
-	public ContractorListRes searchUserByCaseId(Integer caseId) {
+	public ContractorListRes searchUserByCaseIdAndAccepted(Integer caseId, Boolean isAccepted) {
 
+		// check input
 		if (caseId == null) {
 			return new ContractorListRes(RtnCode.INPUT_CASE_ID_NULL.getCode(), RtnCode.INPUT_CASE_ID_NULL.getMessage());
 		}
+		
 
 		// Get from DB
-		List<ContractorInfoVo> contractorList = userDao.searchUserByCaseId(caseId);
+		List<ContractorInfoVo> contractorList = userDao.searchUserByCaseId(caseId, isAccepted);
 
 		if (contractorList.size() <= 0) {
 			return new ContractorListRes(RtnCode.ACCOUNT_NOT_FOUND_WITH_ID.getCode(),
