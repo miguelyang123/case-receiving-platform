@@ -105,10 +105,11 @@ public class UserServiceTests {
 	
 	@Test
 	public void searchByCaseIdTest() {
-		 List<ContractorInfoVo> userList = userDao.searchUserByCaseId(1,true);
+		 List<ContractorInfoVo> userList = userDao.searchUserByCaseId(1,null);
 
-		if(userList.size()<=0) {
+		if(userList.size() <= 0) {
 			System.out.println("userList is " + userList.size());
+			System.out.println("userList is accept " + userList.size());
 		}
 	
 		

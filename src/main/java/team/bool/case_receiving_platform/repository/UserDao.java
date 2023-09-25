@@ -32,12 +32,10 @@ public interface UserDao extends JpaRepository<User, UUID> {
 	@Query(value = " SELECT new team.bool.case_receiving_platform.vo.ContractorInfoVo(u.uuid, u.email, u.userName, u.phone, u.rating, u.resumePdfPath, u.isAdministrator, u.lockedStatus, c.isAccepted , c.acceptDate) "
 			+ " FROM User as u JOIN CaseContractor as c "
 			+ " ON u.uuid = c.contractorUid "
-			+ " WHERE c.caseId = :inputCaseId AND "
-//			+ " CASE WHEN :inputIsAccepted is null THEN c.isAccepted ELSE c.isAccepted = :inputIsAccepted END "
+			+ " WHERE c.caseId = :inputCaseId and "
+			+ " c.isAccepted = CASE WHEN :inputIsAccepted IS NULL THEN c.isAccepted ELSE :inputIsAccepted END "
 			)
-	public List<ContractorInfoVo> searchUserByCaseId(@Param("inputCaseId") int caseId
-//			, @Param("inputIsAccepted") Boolean isAccepted
-			);
+	public List<ContractorInfoVo> searchUserByCaseId(@Param("inputCaseId") int caseId, @Param("inputIsAccepted") Boolean isAccepted);
 	
 
 	
