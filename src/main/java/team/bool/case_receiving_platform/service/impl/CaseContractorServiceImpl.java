@@ -9,20 +9,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import team.bool.case_receiving_platform.constants.CaseRtnCode;
 import team.bool.case_receiving_platform.constants.RtnCode;
 import team.bool.case_receiving_platform.entity.CaseContractor;
 import team.bool.case_receiving_platform.repository.CaseContractorDao;
+import team.bool.case_receiving_platform.repository.CaseDao;
 import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.CaseContractorService;
 import team.bool.case_receiving_platform.vo.CaseContractorListRes;
 import team.bool.case_receiving_platform.vo.ContractorInfoVo;
 import team.bool.case_receiving_platform.vo.ContractorListRes;
+import team.bool.case_receiving_platform.vo.UserListRes;
 
 @Service
 public class CaseContractorServiceImpl implements CaseContractorService {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	public CaseDao caseDao;
 	
 	@Autowired
 	public CaseContractorDao caseContractorDao;
@@ -33,6 +39,11 @@ public class CaseContractorServiceImpl implements CaseContractorService {
 		// check input
 		if (caseId == null) {
 			return new ContractorListRes(RtnCode.INPUT_CASE_ID_NULL.getCode(), RtnCode.INPUT_CASE_ID_NULL.getMessage());
+		}
+		
+		// check Case ID in DB
+		if(!caseDao.existsById(caseId)) {
+			return new ContractorListRes(CaseRtnCode.CASE_NOT_FOUND.getCode(), CaseRtnCode.CASE_NOT_FOUND.getMessage());
 		}
 		
 

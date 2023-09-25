@@ -20,13 +20,18 @@ import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import team.bool.case_receiving_platform.constants.AuthRtnCode;
+import team.bool.case_receiving_platform.constants.CaseRtnCode;
 import team.bool.case_receiving_platform.constants.RtnCode;
 import team.bool.case_receiving_platform.entity.User;
 import team.bool.case_receiving_platform.entity.UserInfo;
+import team.bool.case_receiving_platform.repository.CaseDao;
 import team.bool.case_receiving_platform.repository.UserDao;
+import team.bool.case_receiving_platform.service.ifs.CaseContractorService;
 import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.UserListRes;
 import team.bool.case_receiving_platform.vo.AuthRes;
+import team.bool.case_receiving_platform.vo.ContractorInfoVo;
+import team.bool.case_receiving_platform.vo.ContractorListRes;
 import team.bool.case_receiving_platform.vo.MsgRes;
 
 @Service
@@ -34,7 +39,13 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
-	
+
+	@Autowired
+	public CaseDao caseDao;
+
+	@Autowired
+	private CaseContractorService ccService;
+
 	@Autowired
 	private JavaMailSender mailSender;
 
@@ -67,7 +78,8 @@ public class UserServiceImpl implements UserService {
 		try {
 			// Successful get UserInfo
 			UserInfo userInfo = userToUserInfo(op.get());
-			return new AuthRes(AuthRtnCode.SUCCESSFUL_LOGIN.getCode(), AuthRtnCode.SUCCESSFUL_LOGIN.getMessage(), userInfo);
+			return new AuthRes(AuthRtnCode.SUCCESSFUL_LOGIN.getCode(), AuthRtnCode.SUCCESSFUL_LOGIN.getMessage(),
+					userInfo);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -221,13 +233,13 @@ public class UserServiceImpl implements UserService {
 		}
 
 		Optional<User> op = userDao.findById(user.getUuid());
-		
+
 		// account not found
 		if (op.isEmpty()) {
 			return new AuthRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
 		}
 		// if change email check has same email
-		if(!op.get().getEmail().equals(user.getEmail())) {
+		if (!op.get().getEmail().equals(user.getEmail())) {
 			if (userDao.existsByEmail(user.getEmail())) {
 				return new AuthRes(AuthRtnCode.EMAIL_EXISTED.getCode(), AuthRtnCode.EMAIL_EXISTED.getMessage());
 			}
@@ -292,18 +304,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public MsgRes sendTokenToUserMail(String userEmail, String token) throws Exception  {
-		
+	public MsgRes sendTokenToUserMail(String userEmail, String token) throws Exception {
+
 		// input is null & check input format
 		if (!StringUtils.hasText(userEmail) || !userEmail.matches(emailPattern)) {
 			return new MsgRes(AuthRtnCode.EMAIL_FORMAT_ERROR.getCode(), AuthRtnCode.EMAIL_FORMAT_ERROR.getMessage());
 		}
-		
+
 		// user not found
 		if (!userDao.existsByEmail(userEmail)) {
 			return new MsgRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
 		}
-		
+
 //			SimpleMailMessage message = new SimpleMailMessage();
 //			message.setFrom("javae7278@gmail.com");
 //			message.setTo(userEmail);
@@ -321,39 +333,33 @@ public class UserServiceImpl implements UserService {
 //			
 //			// send to user email
 //			mailSender.send(message);
-		
-		MimeMessage message = mailSender.createMimeMessage();              
-	    MimeMessageHelper helper = new MimeMessageHelper(message);
-	    
-	    helper.setFrom("javae7278@gmail.com", "Speed接案網");
-	    helper.setTo(userEmail);
-	    
-	    String subject = "已要求重新設定密碼";
-	    
-		String content = "<p>你好, </p>"
-        + "<p>您已要求重新設定密碼</p>"
-        + "<p>驗證碼:</p>"
-        + "<p>" + token + "</p>"
-        + "<br>"
-        + "<p>驗證碼有效時間為10分鐘</p>"
-        + "<p>感謝您使用Speed接案網</p>";
 
-	    helper.setSubject(subject);
-	     
-	    helper.setText(content, true);
-	    
-	    // send to user email
-	    mailSender.send(message);
-		
-		
-		return new MsgRes(AuthRtnCode.SUCCESSFUL_SEND_EMAIL.getCode(),AuthRtnCode.SUCCESSFUL_SEND_EMAIL.getMessage());
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom("javae7278@gmail.com", "Speed接案網");
+		helper.setTo(userEmail);
+
+		String subject = "已要求重新設定密碼";
+
+		String content = "<p>你好, </p>" + "<p>您已要求重新設定密碼</p>" + "<p>驗證碼:</p>" + "<p>" + token + "</p>" + "<br>"
+				+ "<p>驗證碼有效時間為10分鐘</p>" + "<p>感謝您使用Speed接案網</p>";
+
+		helper.setSubject(subject);
+
+		helper.setText(content, true);
+
+		// send to user email
+		mailSender.send(message);
+
+		return new MsgRes(AuthRtnCode.SUCCESSFUL_SEND_EMAIL.getCode(), AuthRtnCode.SUCCESSFUL_SEND_EMAIL.getMessage());
 	}
 
 	@Override
 	public MsgRes setNewPwd(String email, String newPwd) {
-		
+
 		Optional<User> op = userDao.findByEmail(email);
-	
+
 		// user not found
 		if (op.isEmpty()) {
 			return new MsgRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
@@ -363,16 +369,43 @@ public class UserServiceImpl implements UserService {
 			return new MsgRes(AuthRtnCode.PASSWORD_FORMAT_ERROR.getCode(),
 					AuthRtnCode.PASSWORD_FORMAT_ERROR.getMessage());
 		}
-		
+
 		User user = op.get();
-		
+
 		// set newPwd with encoder
 		user.setPwd(encoderPwd(newPwd));
-		
+
 		userDao.save(user);
-		
+
 		return new MsgRes(AuthRtnCode.SUCCESSFUL_CHANGE.getCode(), AuthRtnCode.SUCCESSFUL_CHANGE.getMessage());
-		
+
 	}
-	
+
+	// CaseId is null update all User Rating
+	@Override
+	public UserListRes updateUserRatingWithCaseId(Integer caseId) {
+		
+		// check Case ID in DB
+		if(caseId != null && !caseDao.existsById(caseId)) {
+			return new UserListRes(CaseRtnCode.CASE_NOT_FOUND.getCode(), CaseRtnCode.CASE_NOT_FOUND.getMessage());
+		}
+
+		int resInt = userDao.updateUserRating(caseId);
+
+		if (resInt <= 0) {
+			return new UserListRes(RtnCode.UPDATE_FAILED.getCode(), RtnCode.UPDATE_FAILED.getMessage());
+		}
+
+		ContractorListRes cRes = ccService.searchUserByCaseIdAndAccepted(caseId, null);
+
+		// change vo List to UserInfo List
+		List<UserInfo> userInfoList = new ArrayList<>();
+		cRes.getUserInfoList().forEach(info -> {
+			userInfoList.add(info);
+		});
+
+		return new UserListRes(AuthRtnCode.SUCCESSFUL_CHANGE.getCode(), AuthRtnCode.SUCCESSFUL_CHANGE.getMessage(),
+				userInfoList);
+	}
+
 }

@@ -23,7 +23,7 @@ public class UserInfo {
 	private String phone;
 
 	// 評價
-	private int rating;
+	private double rating;
 
 	// 履歷 (檔案位置名稱)
 	private String resumePdfPath;
@@ -38,7 +38,7 @@ public class UserInfo {
 		super();
 	}
 
-	public UserInfo(UUID uuid, String email, String userName, String phone, int rating, String resumePdfPath,
+	public UserInfo(UUID uuid, String email, String userName, String phone, double rating, String resumePdfPath,
 			boolean isAdministrator, boolean lockedStatus) {
 		super();
 		this.uuid = uuid;
@@ -84,11 +84,11 @@ public class UserInfo {
 		this.phone = phone;
 	}
 
-	public int getRating() {
+	public double getRating() {
 		return rating;
 	}
 
-	public void setRating(int rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 

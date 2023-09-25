@@ -11,7 +11,6 @@ import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 // Json映照到UserInfo 忽略的欄位
 
 @Entity
@@ -44,7 +43,7 @@ public class User {
 
 	// 評價
 	@Column(name = "rating")
-	private int rating;
+	private double rating;
 
 	// 履歷 (檔案位置名稱)
 	@Column(name = "resume_pdf_path")
@@ -70,7 +69,7 @@ public class User {
 		super();
 	}
 
-	public User(UUID uuid, String email, String userName, String pwd, String phone, int rating, String resumePdfPath,
+	public User(UUID uuid, String email, String userName, String pwd, String phone, double rating, String resumePdfPath,
 			boolean isAdministrator, boolean lockedStatus) {
 		super();
 		this.uuid = uuid;
@@ -125,15 +124,23 @@ public class User {
 		this.phone = phone;
 	}
 
-	public int getRating() {
+	public double getRating() {
 		return rating;
 	}
 
-	public void setRating(int rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 
-    public boolean isAdministrator() {
+	public String getResumePdfPath() {
+		return resumePdfPath;
+	}
+
+	public void setResumePdfPath(String resumePdfPath) {
+		this.resumePdfPath = resumePdfPath;
+	}
+
+	public boolean isAdministrator() {
 		return isAdministrator;
 	}
 

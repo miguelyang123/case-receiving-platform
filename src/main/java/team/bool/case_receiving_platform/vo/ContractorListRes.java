@@ -2,13 +2,16 @@ package team.bool.case_receiving_platform.vo;
 
 import java.util.List;
 
+import team.bool.case_receiving_platform.entity.UserInfo;
+
 public class ContractorListRes {
 
 	private String code;
 
 	private String message;
 
-	private List<ContractorInfoVo> userInfoList;
+//	private List<ContractorInfoVo> userInfoList;
+	private List<? extends UserInfo> userInfoList;
 
 	public ContractorListRes() {
 		super();
@@ -20,7 +23,14 @@ public class ContractorListRes {
 		this.message = message;
 	}
 
-	public ContractorListRes(String code, String message, List<ContractorInfoVo> userInfoList) {
+//	public ContractorListRes(String code, String message, List<ContractorInfoVo> userInfoList) {
+//		super();
+//		this.code = code;
+//		this.message = message;
+//		this.userInfoList = userInfoList;
+//	}
+
+	public ContractorListRes(String code, String message, List<? extends UserInfo> userInfoList) {
 		super();
 		this.code = code;
 		this.message = message;
@@ -43,12 +53,20 @@ public class ContractorListRes {
 		this.message = message;
 	}
 
-	public List<ContractorInfoVo> getUserInfoList() {
+	public List<? extends UserInfo> getUserInfoList() {
 		return userInfoList;
 	}
 
-	public void setUserInfoList(List<ContractorInfoVo> userInfoList) {
+	public void setUserInfoList(List<? extends UserInfo> userInfoList) {
 		this.userInfoList = userInfoList;
 	}
+
+//	public List<ContractorInfoVo> getUserInfoList() {
+//		return userInfoList;
+//	}
+//
+//	public void setUserInfoList(List<ContractorInfoVo> userInfoList) {
+//		this.userInfoList = userInfoList;
+//	}
 
 }

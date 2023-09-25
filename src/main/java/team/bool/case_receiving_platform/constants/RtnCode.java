@@ -6,7 +6,7 @@ public enum RtnCode {
 	DATA_ERROR("400","資料錯誤"),
 	DATA_NOT_FOUND("404","查無資訊"),
 	ACCOUNT_NOT_FOUND("404","找不到帳戶"),
-	ACCOUNT_NOT_FOUND_WITH_ID("404","此案子無人接案"),
+	ACCOUNT_NOT_FOUND_WITH_ID("404","查無接案人"),
 	INPUT_NULL("400","輸入參數為空值"),
 	INPUT_RATING_ERROR("400","評價輸入錯誤"),
 	INPUT_CASE_ID_NULL("400","輸入案子ID為空值"),

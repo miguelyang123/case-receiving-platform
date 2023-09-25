@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -38,10 +41,15 @@ public interface UserDao extends JpaRepository<User, UUID> {
 	public List<ContractorInfoVo> searchUserByCaseId(@Param("inputCaseId") int caseId, @Param("inputIsAccepted") Boolean isAccepted);
 	
 
+	@Modifying
+	@Transactional
+	@Query(value = " UPDATE `user` u JOIN ( SELECT  cc.contractor_uid uid, avg(ca.case_rating) avgprice "
+			+ " FROM `case` ca JOIN case_contractor cc ON ca.id = cc.case_id "
+			+ " WHERE ca.case_rating != 0 AND cc.contractor_uid IN "
+			+ " ( SELECT contractor_uid FROM case_contractor WHERE "
+			+ " case_id = CASE WHEN :inputCaseId is null THEN case_id ELSE :inputCaseId END ) "
+			+ " GROUP BY cc.contractor_uid ) s "
+			+ " ON u.uuid = s.uid SET u.rating = s.avgprice ", nativeQuery = true)
+	public int updateUserRating(@Param("inputCaseId") Integer caseId);
 	
-//	@Query(value = " SELECT u.uuid, u.email, u.pwd, u.user_name, u.phone, u.rating, u.resume_pdf_path, u.is_administrator, u.locked_status "
-//			+ " FROM user u JOIN case_contractor c "
-//			+ " ON u.uuid = c.contractor_uid "
-//			+ " WHERE c.case_id = :caseId ", nativeQuery = true)
-//	public List<User> searchUserByCaseId(@Param("caseId") int caseId);
 }

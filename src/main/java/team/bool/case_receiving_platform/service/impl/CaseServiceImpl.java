@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import team.bool.case_receiving_platform.constants.AuthRtnCode;
 import team.bool.case_receiving_platform.constants.CaseRtnCode;
 import team.bool.case_receiving_platform.constants.RtnCode;
 import team.bool.case_receiving_platform.entity.Case;
@@ -20,14 +21,19 @@ import team.bool.case_receiving_platform.entity.CaseContractor;
 import team.bool.case_receiving_platform.repository.CaseContractorDao;
 import team.bool.case_receiving_platform.repository.CaseDao;
 import team.bool.case_receiving_platform.service.ifs.CaseService;
+import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.CaseContractorListRes;
 import team.bool.case_receiving_platform.vo.CaseListRes;
+import team.bool.case_receiving_platform.vo.UserListRes;
 
 @Service
 public class CaseServiceImpl implements CaseService {
 
 	@Autowired
 	public CaseDao caseDao;
+
+	@Autowired
+	public UserService userService;
 
 //	@Autowired
 //	public CaseContractorDao caseContractorDao;
@@ -112,23 +118,49 @@ public class CaseServiceImpl implements CaseService {
 	@Override
 	public CaseListRes editCase(Case editedCase) {
 
+		Integer eCaseId = editedCase.getId();
+		Optional<Case> opCase = caseDao.findById(eCaseId);
+		Case oldCase = opCase.get();
+		boolean editedCaseHasChanged = editedCase.getCaseRating() != oldCase.getCaseRating();
+		
 		// check input
 		CaseListRes result = checkCaseInput(editedCase);
 		if (!result.getCode().equals(CaseRtnCode.SUCCESSFUL.getCode())) {
 			return result;
 		}
+		// check Case ID in DB
+		if (opCase.isEmpty()) {
+			return new CaseListRes(CaseRtnCode.CASE_NOT_FOUND.getCode(), CaseRtnCode.CASE_NOT_FOUND.getMessage());
+		}
 
-
-		
 		// set CaseClass
 		editedCase = setCaseClassWithLocation(editedCase);
-
 		// set create date time
 		editedCase.setCreatedDate(caseDao.findById(editedCase.getId()).get().getCreatedDate());
 
-		
 		// save to DB
 		Case savedCase = caseDao.save(editedCase);
+		
+		
+		// if change case rating, will change user rating
+		if (editedCase.getCaseRating() != 0 && editedCaseHasChanged) {
+
+			try {
+				
+				// update user rating
+				UserListRes userListRes = userService.updateUserRatingWithCaseId(editedCase.getId());
+
+				// update error
+				if (!userListRes.getCode().equals(AuthRtnCode.SUCCESSFUL_CHANGE.getCode())) {
+					return new CaseListRes(userListRes.getCode(), userListRes.getMessage());
+				}
+				
+			} catch (Exception e) {
+				return new CaseListRes(CaseRtnCode.DATA_ERROR.getCode(), e.getMessage());
+			}
+
+
+		}
 
 		return new CaseListRes(CaseRtnCode.SUCCESSFUL_UPDATE.getCode(), CaseRtnCode.SUCCESSFUL_UPDATE.getMessage(),
 				new ArrayList<Case>(Arrays.asList(savedCase)));

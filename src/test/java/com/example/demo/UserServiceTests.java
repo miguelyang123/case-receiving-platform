@@ -21,6 +21,7 @@ import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.AuthRes;
 import team.bool.case_receiving_platform.vo.ContractorInfoVo;
+import team.bool.case_receiving_platform.vo.UserListRes;
 
 @SpringBootTest(classes = CaseReceivingPlatformApplication.class)
 public class UserServiceTests {
@@ -117,6 +118,22 @@ public class UserServiceTests {
 //			SystemOutMsg(user);
 			System.out.println(user.getUserName());
 		}
+	}
+	
+	@Test
+	public void updateUserRatingTest() {
+//		 int resInt = userDao.updateUserRating(4);
+//		 
+//		 if(resInt <= 0) {
+//			 System.out.println("失敗 resInt : " + resInt);
+//		 } else {
+//			 System.out.println("成功");
+//		 }
+		
+		UserListRes userListRes = userService.updateUserRatingWithCaseId(1);
+		
+		System.out.println(userListRes.getMessage());
+		
 	}
 
 }
