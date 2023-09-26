@@ -1,10 +1,8 @@
 package team.bool.case_receiving_platform.service.ifs;
 
-import java.util.List;
 import java.util.UUID;
 
 import team.bool.case_receiving_platform.entity.User;
-import team.bool.case_receiving_platform.entity.UserInfo;
 import team.bool.case_receiving_platform.vo.AuthRes;
 import team.bool.case_receiving_platform.vo.MsgRes;
 import team.bool.case_receiving_platform.vo.UserListRes;

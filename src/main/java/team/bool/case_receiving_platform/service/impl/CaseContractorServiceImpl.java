@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import team.bool.case_receiving_platform.constants.AuthRtnCode;
 import team.bool.case_receiving_platform.constants.CaseRtnCode;
 import team.bool.case_receiving_platform.constants.RtnCode;
 import team.bool.case_receiving_platform.entity.CaseContractor;
@@ -16,7 +17,9 @@ import team.bool.case_receiving_platform.repository.CaseContractorDao;
 import team.bool.case_receiving_platform.repository.CaseDao;
 import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.CaseContractorService;
+import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.CaseContractorListRes;
+import team.bool.case_receiving_platform.vo.CaseListRes;
 import team.bool.case_receiving_platform.vo.ContractorInfoVo;
 import team.bool.case_receiving_platform.vo.ContractorListRes;
 import team.bool.case_receiving_platform.vo.UserListRes;
@@ -32,6 +35,9 @@ public class CaseContractorServiceImpl implements CaseContractorService {
 	
 	@Autowired
 	public CaseContractorDao caseContractorDao;
+	
+//	@Autowired
+//	public UserService userService;
 
 	@Override
 	public ContractorListRes searchUserByCaseIdAndAccepted(Integer caseId, Boolean isAccepted) {
@@ -107,5 +113,7 @@ public class CaseContractorServiceImpl implements CaseContractorService {
 				caseContractorDao.findByCaseIdAndUserIdList(caseId, userIdList));
 
 	}
+
+
 
 }

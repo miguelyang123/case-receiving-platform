@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import team.bool.case_receiving_platform.service.ifs.CaseContractorService;
+import team.bool.case_receiving_platform.service.ifs.CaseService;
+import team.bool.case_receiving_platform.vo.CaseCompletionReq;
 import team.bool.case_receiving_platform.vo.CaseContractorListRes;
 import team.bool.case_receiving_platform.vo.ChooseContractorsReq;
 import team.bool.case_receiving_platform.vo.ContractorListRes;
@@ -19,6 +21,9 @@ public class EditCasePageController {
 
 	@Autowired
 	private CaseContractorService ccService;
+	
+	@Autowired
+	private CaseService caseService;
 
 	@GetMapping("search_user_by_caseid")
 	public ContractorListRes searchUserByCaseIdAndAccepted(@RequestParam(name = "caseId") Integer caseId, @RequestParam(name = "isAccepted", required = false) Boolean isAccepted) {
@@ -31,4 +36,12 @@ public class EditCasePageController {
 
 		return ccService.initiatorChooseContractors(req.getCaseId(), req.getUserIdList(), req.getIsAccepted());
 	}
+	
+	@PostMapping("case_completion")
+	public CaseContractorListRes caseCompletion(@RequestBody CaseCompletionReq req) {
+		
+		return caseService.caseCompletion(req.getCaseId(), req.getCaseRating());
+	
+	}
+	
 }

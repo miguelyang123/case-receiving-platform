@@ -15,6 +15,7 @@ import team.bool.case_receiving_platform.entity.CaseContractor;
 import team.bool.case_receiving_platform.repository.CaseContractorDao;
 import team.bool.case_receiving_platform.repository.CaseDao;
 import team.bool.case_receiving_platform.service.ifs.CaseService;
+import team.bool.case_receiving_platform.vo.CaseContractorListRes;
 import team.bool.case_receiving_platform.vo.CaseListRes;
 
 @SpringBootTest(classes = CaseReceivingPlatformApplication.class)
@@ -111,6 +112,13 @@ public class CaseServiceTests {
 			System.out.println(item.getAcceptDate());
 
 		});
+	}
+	
+	@Test
+	public void caseCompletionTest() {
+		CaseContractorListRes res = caseService.caseCompletion(2, 4);
+		
+		System.out.println(res.getMessage());
 	}
 
 }

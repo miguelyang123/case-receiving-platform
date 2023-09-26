@@ -33,6 +33,9 @@ public class CaseServiceImpl implements CaseService {
 	public CaseDao caseDao;
 
 	@Autowired
+	public CaseContractorDao caseContractorDao;
+
+	@Autowired
 	public UserService userService;
 
 //	@Autowired
@@ -120,9 +123,9 @@ public class CaseServiceImpl implements CaseService {
 
 		Integer eCaseId = editedCase.getId();
 		Optional<Case> opCase = caseDao.findById(eCaseId);
-		Case oldCase = opCase.get();
-		boolean editedCaseHasChanged = editedCase.getCaseRating() != oldCase.getCaseRating();
-		
+//		Case oldCase = opCase.get();
+//		boolean editedCaseHasChanged = editedCase.getCaseRating() != oldCase.getCaseRating();
+
 		// check input
 		CaseListRes result = checkCaseInput(editedCase);
 		if (!result.getCode().equals(CaseRtnCode.SUCCESSFUL.getCode())) {
@@ -140,13 +143,13 @@ public class CaseServiceImpl implements CaseService {
 
 		// save to DB
 		Case savedCase = caseDao.save(editedCase);
-		
-		
+
 		// if change case rating, will change user rating
-		if (editedCase.getCaseRating() != 0 && editedCaseHasChanged) {
+//		if (editedCase.getCaseRating() != 0 && editedCaseHasChanged) {
+		if (editedCase.getCaseRating() != 0) {
 
 			try {
-				
+
 				// update user rating
 				UserListRes userListRes = userService.updateUserRatingWithCaseId(editedCase.getId());
 
@@ -154,11 +157,10 @@ public class CaseServiceImpl implements CaseService {
 				if (!userListRes.getCode().equals(AuthRtnCode.SUCCESSFUL_CHANGE.getCode())) {
 					return new CaseListRes(userListRes.getCode(), userListRes.getMessage());
 				}
-				
+
 			} catch (Exception e) {
 				return new CaseListRes(CaseRtnCode.DATA_ERROR.getCode(), e.getMessage());
 			}
-
 
 		}
 
@@ -193,6 +195,62 @@ public class CaseServiceImpl implements CaseService {
 		return new CaseListRes(CaseRtnCode.SUCCESSFUL.getCode(), CaseRtnCode.SUCCESSFUL.getMessage(),
 				new ArrayList<Case>(caseList));
 	}
+
+	@Override
+	public CaseContractorListRes caseCompletion(Integer caseId, Integer caseRating) {
+
+		// check caseId
+		if (caseId == null) {
+			return new CaseContractorListRes(CaseRtnCode.CASEID_IS_NULL.getCode(), CaseRtnCode.CASEID_IS_NULL.getMessage());
+		}
+		// check caseRating input
+		if (caseRating == null || caseRating < 0 || caseRating > 5) {
+			return new CaseContractorListRes(CaseRtnCode.RATING_INPUT_ERROR.getCode(),
+					CaseRtnCode.RATING_INPUT_ERROR.getMessage());
+		}
+
+		try {
+			
+			// get case
+			Optional<Case> opCase = caseDao.findById(caseId);
+			// check Case ID in DB
+			if (opCase.isEmpty()) {
+				return new CaseContractorListRes(CaseRtnCode.CASE_NOT_FOUND.getCode(), CaseRtnCode.CASE_NOT_FOUND.getMessage());
+			}
+			Case dbCase = opCase.get();
+			dbCase.setCaseRating(caseRating);
+			
+			CaseListRes caseListRes = editCase(dbCase);
+			
+			// update error
+			if (!caseListRes.getCode().equals(AuthRtnCode.SUCCESSFUL_CHANGE.getCode())) {
+				return new CaseContractorListRes(caseListRes.getCode(), caseListRes.getMessage());
+			}
+			
+//			// update user rating
+//			UserListRes userListRes = userService.updateUserRatingWithCaseId(caseId);
+//
+//			// update error
+//			if (!userListRes.getCode().equals(AuthRtnCode.SUCCESSFUL_CHANGE.getCode())) {
+//				return new CaseContractorListRes(userListRes.getCode(), userListRes.getMessage());
+//			}
+
+			//update Case Contractor IsAccepte
+			int resNum = caseContractorDao.updateIsAcceptedCace(caseId);
+
+			if (resNum <= 0) {
+				return new CaseContractorListRes(CaseRtnCode.SAVE_DATA_ERROR.getCode(), CaseRtnCode.SAVE_DATA_ERROR.getMessage());
+			}
+
+		} catch (Exception e) {
+			return new CaseContractorListRes(CaseRtnCode.DATA_ERROR.getCode(), e.getMessage());
+		}
+
+		return new CaseContractorListRes(RtnCode.SUCCESSFUL.getCode(), RtnCode.SUCCESSFUL.getMessage(),
+				caseContractorDao.findByCaseId(caseId));
+		
+	}
+	
 
 //	public CaseContractorListRes contractorAcceptCase(CaseContractor newCaseContractor) {
 //		try {

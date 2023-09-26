@@ -18,4 +18,6 @@ public interface CaseService {
 			LocalDateTime deadlineFrom, LocalDateTime deadlineTo, String caseClass, String initiator, Boolean onShelf,
 			String currentStatus, Integer caseRating);
 
+	public CaseContractorListRes caseCompletion(Integer caseId, Integer caseRating);
+
 }

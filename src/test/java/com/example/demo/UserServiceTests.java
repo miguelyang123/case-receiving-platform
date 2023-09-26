@@ -16,7 +16,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import team.bool.case_receiving_platform.CaseReceivingPlatformApplication;
 import team.bool.case_receiving_platform.constants.AuthRtnCode;
+import team.bool.case_receiving_platform.entity.CaseContractor;
 import team.bool.case_receiving_platform.entity.User;
+import team.bool.case_receiving_platform.repository.CaseContractorDao;
 import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.AuthRes;
@@ -31,6 +33,9 @@ public class UserServiceTests {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private CaseContractorDao caseContractorDao;
 	
 
 	@Autowired
@@ -134,6 +139,12 @@ public class UserServiceTests {
 		
 		System.out.println(userListRes.getMessage());
 		
+//		List<CaseContractor> res = caseContractorDao.findByCaseId(2);
+//		res.forEach(item->{
+//			System.out.println(item.getContractorUid());
+//		});
+
 	}
+	
 
 }

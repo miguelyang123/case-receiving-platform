@@ -4,11 +4,11 @@ import java.util.List;
 
 public class ChooseContractorsReq {
 
-	public Integer caseId;
+	private Integer caseId;
 
-	public List<String> userIdList;
+	private List<String> userIdList;
 
-	public Boolean isAccepted;
+	private Boolean isAccepted;
 
 	public Integer getCaseId() {
 		return caseId;

@@ -1,16 +1,13 @@
 package team.bool.case_receiving_platform.service.impl;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,11 +25,10 @@ import team.bool.case_receiving_platform.repository.CaseDao;
 import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.CaseContractorService;
 import team.bool.case_receiving_platform.service.ifs.UserService;
-import team.bool.case_receiving_platform.vo.UserListRes;
 import team.bool.case_receiving_platform.vo.AuthRes;
-import team.bool.case_receiving_platform.vo.ContractorInfoVo;
 import team.bool.case_receiving_platform.vo.ContractorListRes;
 import team.bool.case_receiving_platform.vo.MsgRes;
+import team.bool.case_receiving_platform.vo.UserListRes;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -155,6 +151,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public AuthRes getBalance(String email, String pwd) {
 
+		
+		
+		
 		return getUserInfoWithEmailAndPwd(email, pwd);
 	}
 
@@ -172,8 +171,11 @@ public class UserServiceImpl implements UserService {
 		}
 
 		// set UUID
-		user.setUuid(UUID.randomUUID());
-
+		UUID newUserId = UUID.randomUUID();
+		user.setUuid(newUserId);
+		// set pdf Path
+		String pdfPath = "pdfs/" + newUserId + ".pdf";
+		user.setResumePdfPath(pdfPath);
 		// encoder pwd
 		user.setPwd(encoderPwd(user.getPwd()));
 
