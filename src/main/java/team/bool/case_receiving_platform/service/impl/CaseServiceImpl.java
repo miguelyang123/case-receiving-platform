@@ -20,6 +20,7 @@ import team.bool.case_receiving_platform.entity.Case;
 import team.bool.case_receiving_platform.entity.CaseContractor;
 import team.bool.case_receiving_platform.repository.CaseContractorDao;
 import team.bool.case_receiving_platform.repository.CaseDao;
+import team.bool.case_receiving_platform.repository.UserDao;
 import team.bool.case_receiving_platform.service.ifs.CaseService;
 import team.bool.case_receiving_platform.service.ifs.UserService;
 import team.bool.case_receiving_platform.vo.CaseContractorListRes;
@@ -31,6 +32,9 @@ public class CaseServiceImpl implements CaseService {
 
 	@Autowired
 	public CaseDao caseDao;
+
+	@Autowired
+	private UserDao userDao;
 
 	@Autowired
 	public CaseContractorDao caseContractorDao;
@@ -192,8 +196,22 @@ public class CaseServiceImpl implements CaseService {
 		List<Case> caseList = caseDao.searchCaseByInput(searchKeyword, minBudget, maxBudget, location, deadlineFrom,
 				deadlineTo, caseClass, initiator, onShelf, currentStatus, caseRating);
 
-		return new CaseListRes(CaseRtnCode.SUCCESSFUL.getCode(), CaseRtnCode.SUCCESSFUL.getMessage(),
-				new ArrayList<Case>(caseList));
+		return new CaseListRes(CaseRtnCode.SUCCESSFUL.getCode(), CaseRtnCode.SUCCESSFUL.getMessage(), caseList);
+	}
+
+	@Override
+	public CaseListRes findAcceptCaseWithUserId(String userId) {
+
+		// input userId error
+		if (!StringUtils.hasText(userId) || !userDao.existsById(UUID.fromString(userId))) {
+			return new CaseListRes(CaseRtnCode.INPUT_USERID_ERROR.getCode(),
+					CaseRtnCode.INPUT_USERID_ERROR.getMessage());
+		}
+		
+		// search case DB with userId
+		List<Case> caseList = caseDao.searchAcceptCaseByUserId(userId);
+
+		return new CaseListRes(CaseRtnCode.SUCCESSFUL.getCode(), CaseRtnCode.SUCCESSFUL.getMessage(), caseList);
 	}
 
 	@Override
@@ -201,7 +219,8 @@ public class CaseServiceImpl implements CaseService {
 
 		// check caseId
 		if (caseId == null) {
-			return new CaseContractorListRes(CaseRtnCode.CASEID_IS_NULL.getCode(), CaseRtnCode.CASEID_IS_NULL.getMessage());
+			return new CaseContractorListRes(CaseRtnCode.CASEID_IS_NULL.getCode(),
+					CaseRtnCode.CASEID_IS_NULL.getMessage());
 		}
 		// check caseRating input
 		if (caseRating == null || caseRating < 0 || caseRating > 5) {
@@ -210,25 +229,26 @@ public class CaseServiceImpl implements CaseService {
 		}
 
 		try {
-			
+
 			// get case
 			Optional<Case> opCase = caseDao.findById(caseId);
 			// check Case ID in DB
 			if (opCase.isEmpty()) {
-				return new CaseContractorListRes(CaseRtnCode.CASE_NOT_FOUND.getCode(), CaseRtnCode.CASE_NOT_FOUND.getMessage());
+				return new CaseContractorListRes(CaseRtnCode.CASE_NOT_FOUND.getCode(),
+						CaseRtnCode.CASE_NOT_FOUND.getMessage());
 			}
-			//set Completion data
+			// set Completion data
 			Case dbCase = opCase.get();
 			dbCase.setCaseRating(caseRating);
 			dbCase.setCompletionDate(LocalDateTime.now());
-			
+
 			CaseListRes caseListRes = editCase(dbCase);
-			
+
 			// update error
 			if (!caseListRes.getCode().equals(AuthRtnCode.SUCCESSFUL_CHANGE.getCode())) {
 				return new CaseContractorListRes(caseListRes.getCode(), caseListRes.getMessage());
 			}
-			
+
 //			// update user rating
 //			UserListRes userListRes = userService.updateUserRatingWithCaseId(caseId);
 //
@@ -237,11 +257,12 @@ public class CaseServiceImpl implements CaseService {
 //				return new CaseContractorListRes(userListRes.getCode(), userListRes.getMessage());
 //			}
 
-			//update Case Contractor IsAccepte
+			// update Case Contractor IsAccepte
 			int resNum = caseContractorDao.updateIsAcceptedCace(caseId);
 
 			if (resNum <= 0) {
-				return new CaseContractorListRes(CaseRtnCode.SAVE_DATA_ERROR.getCode(), CaseRtnCode.SAVE_DATA_ERROR.getMessage());
+				return new CaseContractorListRes(CaseRtnCode.SAVE_DATA_ERROR.getCode(),
+						CaseRtnCode.SAVE_DATA_ERROR.getMessage());
 			}
 
 		} catch (Exception e) {
@@ -250,9 +271,8 @@ public class CaseServiceImpl implements CaseService {
 
 		return new CaseContractorListRes(RtnCode.SUCCESSFUL.getCode(), RtnCode.SUCCESSFUL.getMessage(),
 				caseContractorDao.findByCaseId(caseId));
-		
+
 	}
-	
 
 //	public CaseContractorListRes contractorAcceptCase(CaseContractor newCaseContractor) {
 //		try {

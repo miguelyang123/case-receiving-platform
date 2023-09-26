@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import team.bool.case_receiving_platform.entity.Case;
 import team.bool.case_receiving_platform.entity.User;
+import team.bool.case_receiving_platform.vo.ContractorInfoVo;
 
 @Repository
 public interface CaseDao extends JpaRepository<Case, Integer> {
@@ -30,6 +31,7 @@ public interface CaseDao extends JpaRepository<Case, Integer> {
 			+ " on_shelf = case when :onShelf is null then on_shelf else :onShelf end and "
 			+ " current_status = case when :currentStatus is null then current_status else :currentStatus end and "
 			+ " case_rating = case when :caseRating is null then case_rating else :caseRating end"
+//			+ " order by budget desc "
 			, nativeQuery = true)
 	public List<Case> searchCaseByInput(
 			@Param("searchKeyword") String searchKeyword,
@@ -43,7 +45,22 @@ public interface CaseDao extends JpaRepository<Case, Integer> {
 			@Param("onShelf") Boolean onShelf,
 			@Param("currentStatus") String currentStatus,
 			@Param("caseRating") Integer caseRating
+//			,@Param(":orderKey") String orderKey,
+//			@Param(":sortKey")String sortKey
 			);
+	
+	
+//	@Query(value = " SELECT new team.bool.case_receiving_platform.vo.ContractorInfoVo(u.uuid, u.email, u.userName, u.phone, u.rating, u.resumePdfPath, u.isAdministrator, u.lockedStatus, c.isAccepted , c.acceptDate) "
+//			+ " FROM User as u JOIN CaseContractor as c "
+//			+ " ON u.uuid = c.contractorUid "
+//			+ " WHERE c.caseId = :inputCaseId and "
+//			+ " c.isAccepted = CASE WHEN :inputIsAccepted IS NULL THEN c.isAccepted ELSE :inputIsAccepted END "
+//			)
+	@Query(value = " SELECT ca.id, ca.case_name, ca.budget, ca.location, ca.content, ca.deadline, ca.created_date, ca.case_class, ca.initiator, ca.on_shelf, ca.current_status, ca.progress_percentage, ca.completion_date, ca.case_rating "
+			+ " FROM `case` ca JOIN `case_contractor` cc "
+			+ " ON ca.id = cc.case_id WHERE  cc.contractor_uid = :inputUserId "
+			,nativeQuery = true)
+	public List<Case> searchAcceptCaseByUserId(@Param("inputUserId") String userId);
 	
 	
 	

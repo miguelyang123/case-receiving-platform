@@ -10,6 +10,7 @@ public enum CaseRtnCode {
 	DATA_ERROR("400","資料錯誤"),
 	SAVE_DATA_ERROR("400","儲存資料錯誤"),
 	NAME_FORMAT_ERROR("400","案件名稱格式錯誤"),
+	INPUT_USERID_ERROR("400","請輸入帳戶ID或無此帳戶ID"),
 	CASEID_IS_NULL("400","請輸入案件ID"),
 	BUDGET_IS_NULL("400","請輸入案件預算"),
 	BUDGET_INPUT_ERROR("400","輸入預算不可為負數或輸入值過大"),

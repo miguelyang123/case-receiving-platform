@@ -71,7 +71,7 @@ public class CaseServiceTests {
 //		List<Case> caseList = caseDao.searchCaseByInput(null, null,null,null,null,null,null,null,null);
 //		List<Case> caseList = caseDao.searchCaseByInput(now);
 
-		CaseListRes result = caseService.findCaseWithInput("09", null, null, null, null, null, null, null, null, null,
+		CaseListRes result = caseService.findCaseWithInput(null, null, null, null, null, null, null, null, null, null,
 				null);
 
 		List<Case> caseList = result.getCaseList();
@@ -81,6 +81,8 @@ public class CaseServiceTests {
 			System.out.println(fCase.getId());
 			
 		}
+		
+		
 
 	}
 
@@ -131,5 +133,14 @@ public class CaseServiceTests {
 		boolean bool = caseContractorDao.existsByCaseIdAndContractorUid(2, uuid);
 		System.out.println(bool);
 	}
+	
+	@Test
+	public void searchUserByCaseIdDaoTest() {
+		List<Case> caseList = caseDao.searchAcceptCaseByUserId("da1c30fe-2728-45c1-830b-23d0fc43f676");
+		caseList.forEach(caseInfo->{
+			System.out.println(caseInfo.getCaseName());
+		});
+	}
+	
 
 }

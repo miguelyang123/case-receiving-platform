@@ -52,17 +52,14 @@ public class SearchCaseController {
 		return caseService.findCaseWithInput(searchKeyword, minBudget, maxBudget, location, deadlineFrom, deadlineTo, caseClass, initiator, onShelf, currentStatus, caseRating);
 	}
 	
+	@GetMapping("with_user_id")
+	public CaseListRes findAcceptCaseWithUserId(@RequestParam(name = "userId") String userId) {
+		
+		return caseService.findAcceptCaseWithUserId(userId);
+		
+	}
 	
-//	@GetMapping("test_api")
-//	public CaseListRes testApi(
-//			@RequestParam(name = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date
-//			) {
-//		System.out.println("============================");
-//		System.out.println( "DateTime:" + date.getYear());
-//		System.out.println("============================");
-//		return null;
-//
-//	}
+	
 	
 	
 }
