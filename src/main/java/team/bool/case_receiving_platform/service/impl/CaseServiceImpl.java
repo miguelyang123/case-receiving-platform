@@ -217,8 +217,10 @@ public class CaseServiceImpl implements CaseService {
 			if (opCase.isEmpty()) {
 				return new CaseContractorListRes(CaseRtnCode.CASE_NOT_FOUND.getCode(), CaseRtnCode.CASE_NOT_FOUND.getMessage());
 			}
+			//set Completion data
 			Case dbCase = opCase.get();
 			dbCase.setCaseRating(caseRating);
+			dbCase.setCompletionDate(LocalDateTime.now());
 			
 			CaseListRes caseListRes = editCase(dbCase);
 			

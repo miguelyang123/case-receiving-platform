@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,20 +64,22 @@ public class CaseServiceTests {
 
 	@Test
 	public void findCaseTest() {
-		LocalDateTime now = LocalDateTime.now();
-		System.out.println("====================================");
-		System.out.println("nowTime" + now);
+//		LocalDateTime now = LocalDateTime.now();
+//		System.out.println("====================================");
+//		System.out.println("nowTime" + now);
 
 //		List<Case> caseList = caseDao.searchCaseByInput(null, null,null,null,null,null,null,null,null);
 //		List<Case> caseList = caseDao.searchCaseByInput(now);
 
-		CaseListRes result = caseService.findCaseWithInput(null, 0, 10000, null, null, null, null, null, null, null,
+		CaseListRes result = caseService.findCaseWithInput("09", null, null, null, null, null, null, null, null, null,
 				null);
 
 		List<Case> caseList = result.getCaseList();
 
 		for (Case fCase : caseList) {
-			System.out.println(fCase.getCaseName());
+//			System.out.println(fCase.getCaseName());
+			System.out.println(fCase.getId());
+			
 		}
 
 	}
@@ -116,9 +119,17 @@ public class CaseServiceTests {
 	
 	@Test
 	public void caseCompletionTest() {
-		CaseContractorListRes res = caseService.caseCompletion(2, 4);
+//		CaseContractorListRes res = caseService.caseCompletion(2, 4);
+//		
+//		System.out.println(res.getMessage());
+	}
+	
+	@Test
+	public void existsByCaseIdAndContractorUidTest() {
+		UUID uuid = UUID.fromString("e451beb8-fc91-472b-933b-b96a0e8c853b");
 		
-		System.out.println(res.getMessage());
+		boolean bool = caseContractorDao.existsByCaseIdAndContractorUid(2, uuid);
+		System.out.println(bool);
 	}
 
 }

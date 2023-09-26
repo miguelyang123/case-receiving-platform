@@ -1,6 +1,7 @@
 package team.bool.case_receiving_platform.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -18,6 +19,8 @@ public interface CaseContractorDao extends JpaRepository<CaseContractor, CaseCon
 
 	public List<CaseContractor> findByCaseId(int caseId);
 	
+	public boolean existsByCaseIdAndContractorUid(int caseId, UUID contractorUid);
+	
 	@Modifying
 	@Transactional
 	@Query(value = " UPDATE `case_contractor` SET `is_accepted` = :inputIsAccepted WHERE `case_id` = :inputCaseId AND `contractor_uid` IN :userIdList ", nativeQuery = true)
@@ -29,7 +32,8 @@ public interface CaseContractorDao extends JpaRepository<CaseContractor, CaseCon
 
 	@Modifying
 	@Transactional
-	@Query(value = " UPDATE `case_contractor` c SET c.is_accepted = true WHERE c.case_id = :inputCaseId ", nativeQuery = true)
+	@Query(value = " UPDATE `case_contractor` c SET c.is_accepted = true WHERE c.case_id = :inputCaseId "
+			+ " UPDATE `case` SET current_status = 'Completed' WHERE id = :inputCaseId ", nativeQuery = true)
 	public int updateIsAcceptedCace(@Param("inputCaseId") int caseId);
 	
 }

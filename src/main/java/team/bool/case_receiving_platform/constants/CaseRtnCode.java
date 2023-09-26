@@ -15,6 +15,7 @@ public enum CaseRtnCode {
 	BUDGET_INPUT_ERROR("400","輸入預算不可為負數或輸入值過大"),
 	RATING_INPUT_ERROR("400","輸入評價不可為負數或大於5"),
 	CONTENT_FORMAT_ERROR("400","輸入的內文過長請小於1000字"),
+	ACCEPT_CASE_IS_REPEAT("400","已重複接案"),
 	ERROR("400", "error!");
 	
 	private String code;

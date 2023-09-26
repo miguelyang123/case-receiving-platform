@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,15 +69,23 @@ public class CaseContractorServiceImpl implements CaseContractorService {
 	@Override
 	public CaseContractorListRes contractorAcceptCase(CaseContractor newCaseContractor) {
 		try {
+			
+			int caseId = newCaseContractor.getCaseId();
+			UUID uid = newCaseContractor.getContractorUid();
 
 			// check Input
-			if (newCaseContractor.getCaseId() == 0) {
+			if (caseId == 0) {
 				return new CaseContractorListRes(RtnCode.INPUT_CASE_ID_NULL.getCode(),
 						RtnCode.INPUT_CASE_ID_NULL.getMessage());
 			}
-			if (newCaseContractor.getContractorUid() == null) {
+			if (uid == null) {
 				return new CaseContractorListRes(RtnCode.INPUT_USER_ID_NULL.getCode(),
 						RtnCode.INPUT_USER_ID_NULL.getMessage());
+			}
+			
+			if(caseContractorDao.existsByCaseIdAndContractorUid(caseId, uid)) {
+				return new CaseContractorListRes(CaseRtnCode.ACCEPT_CASE_IS_REPEAT.getCode(),
+						CaseRtnCode.ACCEPT_CASE_IS_REPEAT.getMessage());
 			}
 
 			// set Accept Date at now
