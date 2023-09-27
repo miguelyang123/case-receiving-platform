@@ -53,7 +53,7 @@ public interface CaseDao extends JpaRepository<Case, Integer> {
 //
 //			);
 	@Query(value = "SELECT c FROM Case c where "
-			+ " CONCAT_WS(c.caseName, c.content) like case when :searchKeyword is null then '%%' else concat('%',:searchKeyword,'%') end and "
+			+ " concat(c.caseName, c.content) like case when :searchKeyword is null then '%%' else concat('%',:searchKeyword,'%') end and "
 			+ " c.budget >= case when :minBudget is null then c.budget else :minBudget end and "
 			+ " c.budget <= case when :maxBudget is null then c.budget else :maxBudget end and "
 			+ " c.location = case when :inputLocation is null then c.location else :inputLocation end and "
