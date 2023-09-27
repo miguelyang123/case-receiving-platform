@@ -35,7 +35,9 @@ public class SearchCaseController {
 			@RequestParam(name = "initiator", required = false) String initiator,
 			@RequestParam(name = "onShelf", required = false) Boolean onShelf,
 			@RequestParam(name = "currentStatus", required = false) String currentStatus,
-			@RequestParam(name = "caseRating", required = false) Integer caseRating
+			@RequestParam(name = "caseRating", required = false) Integer caseRating,
+			@RequestParam(name = "fieldKey", required = false) String fieldKey,
+			@RequestParam(name = "sortParam", required = false) String sortParam
 			) {
 		
 		// Param String is "" 
@@ -49,7 +51,8 @@ public class SearchCaseController {
 			initiator = null;
 		}
 		
-		return caseService.findCaseWithInput(searchKeyword, minBudget, maxBudget, location, deadlineFrom, deadlineTo, caseClass, initiator, onShelf, currentStatus, caseRating);
+		return caseService.findCaseWithInput(searchKeyword, minBudget, maxBudget, location, deadlineFrom, deadlineTo, 
+				caseClass, initiator, onShelf, currentStatus, caseRating, fieldKey, sortParam);
 	}
 	
 	@GetMapping("with_user_id")

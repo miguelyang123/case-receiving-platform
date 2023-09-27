@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 
 import team.bool.case_receiving_platform.CaseReceivingPlatformApplication;
 import team.bool.case_receiving_platform.entity.Case;
@@ -72,7 +73,7 @@ public class CaseServiceTests {
 //		List<Case> caseList = caseDao.searchCaseByInput(now);
 
 		CaseListRes result = caseService.findCaseWithInput(null, null, null, null, null, null, null, null, null, null,
-				null);
+				null,null,null);
 
 		List<Case> caseList = result.getCaseList();
 
@@ -81,9 +82,29 @@ public class CaseServiceTests {
 			System.out.println(fCase.getId());
 			
 		}
-		
-		
 
+	}
+	
+	@Test
+	public void searchCaseByInputTest() {
+		
+		boolean sortByDesc = true;
+		
+		String sortKey = sortByDesc ? "ASC" : "DESC";
+
+
+		Sort sort = Sort.by(new Sort.Order(Sort.Direction.fromString("desc"), "id"));
+
+		List<Case> caseList = caseDao.searchCaseByInput(
+				null, null, null, null, null, null, null, null, null, null, null
+//				,"budget"
+//				, "desc"
+				, sort
+				);
+		caseList.forEach(fCase->{
+			System.out.println(fCase.getId());
+		});
+		
 	}
 
 	@Test
@@ -110,7 +131,7 @@ public class CaseServiceTests {
 		List<CaseContractor> res = caseContractorDao.findByCaseIdAndUserIdList(1, idList);
 
 		res.forEach(item -> {
-			
+
 			System.out.println(item.getCaseId());
 			System.out.println(item.getContractorUid());
 			System.out.println(item.getIsAccepted());
@@ -118,29 +139,28 @@ public class CaseServiceTests {
 
 		});
 	}
-	
+
 	@Test
 	public void caseCompletionTest() {
 //		CaseContractorListRes res = caseService.caseCompletion(2, 4);
 //		
 //		System.out.println(res.getMessage());
 	}
-	
+
 	@Test
 	public void existsByCaseIdAndContractorUidTest() {
 		UUID uuid = UUID.fromString("e451beb8-fc91-472b-933b-b96a0e8c853b");
-		
+
 		boolean bool = caseContractorDao.existsByCaseIdAndContractorUid(2, uuid);
 		System.out.println(bool);
 	}
-	
+
 	@Test
 	public void searchUserByCaseIdDaoTest() {
 		List<Case> caseList = caseDao.searchAcceptCaseByUserId("da1c30fe-2728-45c1-830b-23d0fc43f676");
-		caseList.forEach(caseInfo->{
+		caseList.forEach(caseInfo -> {
 			System.out.println(caseInfo.getCaseName());
 		});
 	}
-	
 
 }

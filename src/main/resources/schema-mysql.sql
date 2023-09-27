@@ -4,13 +4,14 @@ CREATE TABLE IF NOT EXISTS `user` (
   `pwd` varchar(60) DEFAULT NULL,
   `user_name` varchar(60) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
-  `rating` int DEFAULT '0',
+  `rating` double DEFAULT '0',
   `resume_pdf_path` varchar(200) DEFAULT NULL,
   `is_administrator` tinyint DEFAULT '0',
   `locked_status` tinyint DEFAULT '0',
   PRIMARY KEY (`uuid`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 );
+
 
 CREATE TABLE IF NOT EXISTS `case` (
   `id` int NOT NULL AUTO_INCREMENT,

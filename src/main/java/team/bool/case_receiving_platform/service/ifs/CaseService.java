@@ -16,7 +16,7 @@ public interface CaseService {
 
 	public CaseListRes findCaseWithInput(String searchKeyword, Integer minBudget, Integer maxBudget, String location,
 			LocalDateTime deadlineFrom, LocalDateTime deadlineTo, String caseClass, String initiator, Boolean onShelf,
-			String currentStatus, Integer caseRating);
+			String currentStatus, Integer caseRating, String fieldKey, String sortParam);
 
 	public CaseListRes findAcceptCaseWithUserId(String userId);
 	

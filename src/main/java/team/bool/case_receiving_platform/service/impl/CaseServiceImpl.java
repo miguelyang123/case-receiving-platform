@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -175,7 +176,7 @@ public class CaseServiceImpl implements CaseService {
 	@Override
 	public CaseListRes findCaseWithInput(String searchKeyword, Integer minBudget, Integer maxBudget, String location,
 			LocalDateTime deadlineFrom, LocalDateTime deadlineTo, String caseClass, String initiator, Boolean onShelf,
-			String currentStatus, Integer caseRating) {
+			String currentStatus, Integer caseRating, String fieldKey, String sortParam) {
 
 		// check Budget input
 		if (minBudget != null && minBudget < 0) {
@@ -191,10 +192,22 @@ public class CaseServiceImpl implements CaseService {
 			return new CaseListRes(CaseRtnCode.RATING_INPUT_ERROR.getCode(),
 					CaseRtnCode.RATING_INPUT_ERROR.getMessage());
 		}
-
+		
+		// if sortParam = null, sort is asc
+		if(!StringUtils.hasText(sortParam)) {
+			sortParam = "asc";
+		}
+		// if fieldKey = null, created_date desc
+		if(!StringUtils.hasText(fieldKey)) {
+			fieldKey = "createdDate";
+			sortParam = "desc";
+		}
+		// set Sort
+		Sort sort = Sort.by(new Sort.Order(Sort.Direction.fromString(sortParam), fieldKey));
+		
 		// search case DB
 		List<Case> caseList = caseDao.searchCaseByInput(searchKeyword, minBudget, maxBudget, location, deadlineFrom,
-				deadlineTo, caseClass, initiator, onShelf, currentStatus, caseRating);
+				deadlineTo, caseClass, initiator, onShelf, currentStatus, caseRating, sort);
 
 		return new CaseListRes(CaseRtnCode.SUCCESSFUL.getCode(), CaseRtnCode.SUCCESSFUL.getMessage(), caseList);
 	}
