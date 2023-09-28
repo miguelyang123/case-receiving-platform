@@ -43,7 +43,7 @@ public class User {
 
 	// 評價
 	@Column(name = "rating")
-	private double rating;
+	private Double rating;
 
 	// 履歷 (檔案位置名稱)
 	@Column(name = "resume_pdf_path")
@@ -57,20 +57,21 @@ public class User {
 //    private byte[] ResumePdf;
 
 	// 身份權限(是否是管理者)
+	@JsonProperty("administrator")
 	@Column(name = "is_administrator")
-	private boolean isAdministrator;
+	private Boolean isAdministrator;
 
 	// 鎖定狀態
 	@Column(name = "locked_status")
-	private boolean lockedStatus;
+	private Boolean lockedStatus;
 
 	// 建構方法
 	public User() {
 		super();
 	}
 
-	public User(UUID uuid, String email, String userName, String pwd, String phone, double rating, String resumePdfPath,
-			boolean isAdministrator, boolean lockedStatus) {
+	public User(UUID uuid, String email, String userName, String pwd, String phone, Double rating, String resumePdfPath,
+			Boolean isAdministrator, Boolean lockedStatus) {
 		super();
 		this.uuid = uuid;
 		this.email = email;
@@ -124,11 +125,11 @@ public class User {
 		this.phone = phone;
 	}
 
-	public double getRating() {
+	public Double getRating() {
 		return rating;
 	}
 
-	public void setRating(double rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 
@@ -140,20 +141,25 @@ public class User {
 		this.resumePdfPath = resumePdfPath;
 	}
 
-	public boolean isAdministrator() {
+	public Boolean getIsAdministrator() {
 		return isAdministrator;
 	}
 
-	public void setAdministrator(boolean isAdministrator) {
+	public void setIsAdministrator(Boolean isAdministrator) {
 		this.isAdministrator = isAdministrator;
 	}
 
-	public boolean isLockedStatus() {
+	public Boolean getLockedStatus() {
 		return lockedStatus;
 	}
 
-	public void setLockedStatus(boolean lockedStatus) {
+	public void setLockedStatus(Boolean lockedStatus) {
 		this.lockedStatus = lockedStatus;
 	}
+
+	
+
+
+	
 
 }

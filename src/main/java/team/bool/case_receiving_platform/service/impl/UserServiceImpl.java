@@ -1,12 +1,17 @@
 package team.bool.case_receiving_platform.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -142,6 +147,24 @@ public class UserServiceImpl implements UserService {
 		return encoder.matches(pwd, hashPass);
 	}
 
+	//copy bean
+	private String[] getNullPropertyNames(Object source) {
+		final BeanWrapper src = new BeanWrapperImpl(source);
+		java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+		Set<String> emptyNames = new HashSet<String>();
+		for (java.beans.PropertyDescriptor pd : pds) {
+			Object srcValue = src.getPropertyValue(pd.getName());
+			if (srcValue == null)
+				emptyNames.add(pd.getName());
+		}
+		String[] result = new String[emptyNames.size()];
+		return emptyNames.toArray(result);
+	}
+	
+	public void copyPropertiesIgnoreNull(Object src, Object target){ 
+		BeanUtils.copyProperties(src, target, getNullPropertyNames(src)); 
+		}
+
 	@Override
 	public AuthRes login(String email, String pwd) {
 
@@ -151,9 +174,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public AuthRes getBalance(String email, String pwd) {
 
-		
-		
-		
 		return getUserInfoWithEmailAndPwd(email, pwd);
 	}
 
@@ -236,6 +256,8 @@ public class UserServiceImpl implements UserService {
 
 		Optional<User> op = userDao.findById(user.getUuid());
 
+		User dbUser = op.get();
+
 		// account not found
 		if (op.isEmpty()) {
 			return new AuthRes(AuthRtnCode.ACCOUNT_NOT_FOUND.getCode(), AuthRtnCode.ACCOUNT_NOT_FOUND.getMessage());
@@ -247,16 +269,19 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 
+		// copy user to dbUser without null input
+		copyPropertiesIgnoreNull(user, dbUser);
+
 		// get DB Pwd with encoder
-		user.setPwd(op.get().getPwd());
+//		user.setPwd(op.get().getPwd());
 
 		// save to DB
-		userDao.save(user);
+		userDao.save(dbUser);
 
 		// change User to UserInfo and return
 		try {
 			// Successful get UserInfo
-			UserInfo userInfo = userToUserInfo(user);
+			UserInfo userInfo = userToUserInfo(dbUser);
 			return new AuthRes(AuthRtnCode.SUCCESSFUL_CHANGE.getCode(), AuthRtnCode.SUCCESSFUL_CHANGE.getMessage(),
 					userInfo);
 
@@ -386,9 +411,9 @@ public class UserServiceImpl implements UserService {
 	// CaseId is null update all User Rating
 	@Override
 	public UserListRes updateUserRatingWithCaseId(Integer caseId) {
-		
+
 		// check Case ID in DB
-		if(caseId != null && !caseDao.existsById(caseId)) {
+		if (caseId != null && !caseDao.existsById(caseId)) {
 			return new UserListRes(CaseRtnCode.CASE_NOT_FOUND.getCode(), CaseRtnCode.CASE_NOT_FOUND.getMessage());
 		}
 

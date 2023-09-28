@@ -23,23 +23,25 @@ public class UserInfo {
 	private String phone;
 
 	// 評價
-	private double rating;
+	private Double rating;
 
 	// 履歷 (檔案位置名稱)
 	private String resumePdfPath;
+
 	// 身份權限(是否是管理者)
-	private boolean isAdministrator;
+	@JsonProperty("administrator")
+	private Boolean isAdministrator;
 
 	// 鎖定狀態
-	private boolean lockedStatus;
+	private Boolean lockedStatus;
 
 	// 建構方法
 	public UserInfo() {
 		super();
 	}
 
-	public UserInfo(UUID uuid, String email, String userName, String phone, double rating, String resumePdfPath,
-			boolean isAdministrator, boolean lockedStatus) {
+	public UserInfo(UUID uuid, String email, String userName, String phone, Double rating, String resumePdfPath,
+			Boolean isAdministrator, Boolean lockedStatus) {
 		super();
 		this.uuid = uuid;
 		this.email = email;
@@ -84,11 +86,11 @@ public class UserInfo {
 		this.phone = phone;
 	}
 
-	public double getRating() {
+	public Double getRating() {
 		return rating;
 	}
 
-	public void setRating(double rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 
@@ -100,19 +102,19 @@ public class UserInfo {
 		this.resumePdfPath = resumePdfPath;
 	}
 
-	public boolean isAdministrator() {
+	public Boolean getIsAdministrator() {
 		return isAdministrator;
 	}
 
-	public void setAdministrator(boolean isAdministrator) {
+	public void setIsAdministrator(Boolean isAdministrator) {
 		this.isAdministrator = isAdministrator;
 	}
 
-	public boolean isLockedStatus() {
+	public Boolean getLockedStatus() {
 		return lockedStatus;
 	}
 
-	public void setLockedStatus(boolean lockedStatus) {
+	public void setLockedStatus(Boolean lockedStatus) {
 		this.lockedStatus = lockedStatus;
 	}
 
